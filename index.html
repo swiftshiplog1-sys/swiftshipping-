@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swift Ship Logistics — Global Freight Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #070d1a;
+      --surface:  #0d1526;
+      --surface2: #111e33;
+      --surface3: #16263d;
+      --border:   rgba(255,255,255,0.06);
+      --border2:  rgba(255,255,255,0.11);
+      --gold:     #c9922a;
+      --gold2:    #e8b455;
+      --gold-dim: rgba(201,146,42,0.12);
+      --text:     #dce8f5;
+      --text2:    #8ca3bf;
+      --text3:    #4e6585;
+      --green:    #22c87a;
+      --green-dim:rgba(34,200,122,0.1);
+      --wa:       #25D366;
+      --radius:   14px;
+      --radius-lg:20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── BG TEXTURE ── */
+    .bg-noise {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+    .bg-glow-1 {
+      position: fixed; top: -300px; right: -200px; z-index: 0; pointer-events: none;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,146,42,0.07) 0%, transparent 65%);
+    }
+    .bg-glow-2 {
+      position: fixed; bottom: -200px; left: -150px; z-index: 0; pointer-events: none;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(34,200,122,0.04) 0%, transparent 65%);
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px; height: 72px;
+      background: rgba(7,13,26,0.96);
+      backdrop-filter: blur(24px) saturate(1.6);
+      border-bottom: 1px solid rgba(201,146,42,0.12);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 4px 32px rgba(0,0,0,0.3);
+    }
+    .logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .logo-mark {
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 12px rgba(201,146,42,0.3);
+    }
+    .logo-mark svg { width: 18px; height: 18px; fill: #070d1a; }
+    .logo-name {
+      font-size: 15px; font-weight: 700; letter-spacing: 0.3px;
+      color: var(--text);
+    }
+    .logo-sub { font-size: 10px; color: var(--text3); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 1px; }
+
+    nav { display: flex; align-items: center; gap: 2px; }
+    nav a {
+      font-size: 13px; font-weight: 500; color: var(--text2);
+      padding: 7px 18px; border-radius: 8px; cursor: pointer;
+      background: none; border: none; font-family: inherit;
+      text-decoration: none; letter-spacing: 0.3px;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    nav a.active { color: var(--gold2); background: var(--gold-dim); }
+
+    /* ── PAGE SYSTEM ── */
+    .page { display: none; position: relative; z-index: 5; }
+    .page.active { display: block; animation: pageIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes pageIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── SHARED TYPOGRAPHY ── */
+    .eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .display {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 6vw, 68px);
+      font-weight: 700; line-height: 1.05;
+      color: var(--text); letter-spacing: -0.5px;
+      margin-bottom: 18px;
+    }
+    .display em { font-style: normal; color: var(--gold2); }
+    .lead {
+      font-size: 16px; font-weight: 300; color: var(--text2);
+      line-height: 1.75; max-width: 480px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Inter', sans-serif; font-weight: 600;
+      font-size: 13px; letter-spacing: 0.4px;
+      padding: 13px 28px; border-radius: 10px;
+      cursor: pointer; border: none; text-decoration: none;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #070d1a;
+      box-shadow: 0 4px 16px rgba(201,146,42,0.2);
+    }
+    .btn-gold:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 10px 28px rgba(201,146,42,0.32); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border2);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.18); transform: translateY(-1px); }
+    .btn-ghost {
+      background: var(--surface2); color: var(--text2);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--border2); }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(201,146,42,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 56px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,146,42,0.06);
+    }
+
+    /* ── DIVIDER ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+    /* ── SHARED SECTIONS ── */
+    .section { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+    .section + .section { margin-top: 80px; }
+
+    /* ── CONTACT ROW ── */
+    .contact-row {
+      max-width: 960px; margin: 64px auto 0; padding: 0 32px 80px;
+    }
+    .contact-row-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--text3); margin-bottom: 20px;
+    }
+    .contact-pills { display: flex; gap: 12px; flex-wrap: wrap; }
+    .contact-pill {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 22px; flex: 1; min-width: 220px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .contact-pill:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
+    .contact-pill.email:hover { border-color: rgba(201,146,42,0.4); }
+    .contact-pill.wa:hover    { border-color: rgba(37,211,102,0.35); }
+    .cp-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .contact-pill.email .cp-icon { background: rgba(201,146,42,0.1); }
+    .contact-pill.wa    .cp-icon { background: var(--green-dim); }
+    .cp-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 3px; }
+    .cp-value { font-size: 13px; font-weight: 600; }
+    .contact-pill.email .cp-value { color: var(--gold2); }
+    .contact-pill.wa    .cp-value { color: var(--wa); }
+    .cp-arrow { margin-left: auto; color: var(--text3); font-size: 16px; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 5;
+      border-top: 1px solid var(--border);
+      padding: 28px 32px; text-align: center;
+      font-size: 12px; color: var(--text3); letter-spacing: 0.5px;
+      background: linear-gradient(0deg, rgba(7,13,26,0.8) 0%, transparent 100%);
+    }
+
+    /* ════════════════════════════
+       HOME
+    ════════════════════════════ */
+    .home-hero {
+      max-width: 960px; margin: 0 auto;
+      padding: 100px 32px 72px;
+    }
+    .home-hero .display { font-size: clamp(48px, 7vw, 82px); }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold-dim); border: 1px solid rgba(201,146,42,0.22);
+      border-radius: 100px; padding: 6px 16px; margin-bottom: 28px;
+      font-size: 11px; font-weight: 600; color: var(--gold2);
+      letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold2); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 40px; }
+
+    /* Stats bar */
+    .stats-bar {
+      max-width: 960px; margin: 0 auto 80px; padding: 0 32px;
+    }
+    .stats-inner {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: var(--surface); border: 1px solid rgba(201,146,42,0.14);
+      border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+    .stat-cell {
+      padding: 32px 24px; text-align: center;
+      border-right: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 100%);
+      transition: background 0.3s;
+    }
+    .stat-cell:hover { background: linear-gradient(180deg, rgba(201,146,42,0.06) 0%, var(--surface) 100%); }
+    .stat-cell:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px; font-weight: 700; color: var(--gold2);
+      line-height: 1; margin-bottom: 8px;
+      text-shadow: 0 2px 20px rgba(201,146,42,0.2);
+    }
+    .stat-lbl { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 1.8px; text-transform: uppercase; }
+
+    /* Service grid */
+    .svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; }
+    .svc-card {
+      padding: 28px; cursor: pointer;
+    }
+    .svc-ico {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--gold-dim); border: 1px solid rgba(201,146,42,0.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 18px;
+    }
+    .svc-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .svc-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
+
+    /* Why grid */
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 16px; }
+    .why-card { padding: 26px; }
+    .why-ico { font-size: 24px; margin-bottom: 14px; }
+    .why-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .why-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
+
+    /* CTA banner */
+    .cta-band {
+      background: linear-gradient(110deg, rgba(201,146,42,0.1) 0%, rgba(34,200,122,0.06) 100%);
+      border: 1px solid rgba(201,146,42,0.22);
+      border-radius: var(--radius-lg); padding: 52px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 28px; flex-wrap: wrap;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .cta-band-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .cta-band h2 { font-family: 'Playfair Display', serif; font-size: clamp(26px,3.5vw,38px); font-weight: 700; line-height: 1.15; margin-bottom: 6px; }
+    .cta-band p { font-size: 14px; color: var(--text2); font-weight: 300; }
+
+    /* Testimonials */
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 16px; }
+    .testi-card { padding: 28px; }
+    .testi-stars { color: var(--gold2); font-size: 13px; letter-spacing: 3px; margin-bottom: 16px; }
+    .testi-quote { font-size: 14px; color: var(--text2); line-height: 1.75; font-style: italic; margin-bottom: 22px; border-left: 2px solid var(--gold-dim); padding-left: 16px; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--surface3); border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--gold); flex-shrink: 0;
+    }
+    .testi-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .testi-role { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+    /* ════════════════════════════
+       TRACK
+    ════════════════════════════ */
+    .track-search {
+      display: flex;
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: var(--radius); overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .track-search:focus-within {
+      border-color: rgba(201,146,42,0.5);
+      box-shadow: 0 0 0 4px rgba(201,146,42,0.08), 0 4px 24px rgba(0,0,0,0.2);
+    }
+    .track-search input {
+      flex: 1; background: transparent; border: none; outline: none;
+      padding: 18px 24px; font-family: 'Inter', monospace;
+      font-size: 15px; font-weight: 500; color: var(--text);
+      letter-spacing: 2px;
+    }
+    .track-search input::placeholder { color: var(--text3); font-weight: 400; letter-spacing: 0.5px; font-size: 14px; }
+    .track-search button {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      border: none; color: #070d1a; font-family: 'Inter', sans-serif;
+      font-weight: 700; font-size: 13px; letter-spacing: 0.5px;
+      padding: 18px 32px; cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .track-search button:hover { filter: brightness(1.08); }
+
+    .track-hint {
+      font-size: 12px; color: var(--text3); margin-bottom: 36px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .err-msg {
+      display: none; align-items: center; gap: 10px;
+      background: rgba(255,80,80,0.06); border: 1px solid rgba(255,80,80,0.15);
+      border-radius: var(--radius); padding: 16px 20px;
+      font-size: 13px; color: #ff7070; margin-bottom: 28px;
+    }
+    .err-msg.show { display: flex; }
+
+    /* Result card */
+    .result-card {
+      background: var(--surface); border: 1px solid rgba(201,146,42,0.16);
+      border-radius: var(--radius-lg); overflow: hidden;
+      display: none; margin-bottom: 56px;
+      box-shadow: 0 16px 64px rgba(0,0,0,0.35);
+      animation: slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .result-card.show { display: block; }
+    @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    .rc-header {
+      padding: 28px 32px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, var(--surface2) 0%, rgba(22,38,61,0.8) 100%);
+    }
+    .rc-code { font-size: 10px; font-weight: 700; letter-spacing: 4px; color: var(--text3); text-transform: uppercase; margin-bottom: 8px; }
+    .rc-name { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.2px; }
+
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 16px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .status-pill.in-transit { background: rgba(201,146,42,0.1); color: var(--gold2); border: 1px solid rgba(201,146,42,0.25); }
+    .status-pill.delivered  { background: var(--green-dim);      color: var(--green); border: 1px solid rgba(34,200,122,0.25); }
+    .sp-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+
+    .rc-meta {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    .rc-meta-item {
+      padding: 18px 24px; border-right: 1px solid var(--border);
+    }
+    .rc-meta-item:last-child { border-right: none; }
+    .rc-meta-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 5px; }
+    .rc-meta-val { font-size: 14px; font-weight: 600; color: var(--text); }
+    .rc-meta-val.hi { color: var(--gold2); }
+
+    /* Timeline */
+    .rc-timeline { padding: 36px 32px; }
+    .tl-heading { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text3); margin-bottom: 32px; }
+
+    .tl-step {
+      display: grid; grid-template-columns: 28px 1fr;
+      gap: 0 20px; position: relative;
+      opacity: 0; transform: translateX(-8px);
+      transition: opacity 0.35s, transform 0.35s;
+    }
+    .tl-step.in { opacity: 1; transform: translateX(0); }
+    .tl-step:not(:last-child) .tl-line {
+      position: absolute; left: 13px; top: 30px; bottom: -6px;
+      width: 2px; background: var(--border2);
+    }
+    .tl-step.done:not(:last-child) .tl-line { background: linear-gradient(to bottom, rgba(201,146,42,0.5), var(--border2)); }
+
+    .tl-node {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; position: relative; z-index: 1; margin-top: 1px; flex-shrink: 0;
+    }
+    .tl-step.done   .tl-node { background: var(--gold-dim); border: 1.5px solid var(--gold); color: var(--gold); }
+    .tl-step.active .tl-node { background: var(--gold); border: 2px solid var(--gold2); color: #070d1a; box-shadow: 0 0 0 5px rgba(201,146,42,0.15); font-weight: 700; }
+    .tl-step.future .tl-node { background: var(--surface2); border: 1.5px solid var(--border2); color: var(--text3); }
+
+    .tl-body { padding-bottom: 32px; }
+    .tl-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .tl-step.done   .tl-name { color: var(--text); }
+    .tl-step.active .tl-name { color: var(--gold2); }
+    .tl-step.future .tl-name { color: var(--text3); }
+    .tl-detail { font-size: 13px; color: var(--text2); line-height: 1.6; }
+    .tl-step.future .tl-detail { color: var(--text3); }
+
+    /* ════════════════════════════
+       SERVICES
+    ════════════════════════════ */
+    .svc-block {
+      border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 24px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .svc-block:hover { box-shadow: 0 12px 48px rgba(0,0,0,0.3); transform: translateY(-2px); }
+    .svc-block-head {
+      padding: 36px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 24px;
+      background: var(--surface);
+    }
+    .svc-block-ico {
+      width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+      background: var(--gold-dim); border: 1px solid rgba(201,146,42,0.18);
+      display: flex; align-items: center; justify-content: center; font-size: 26px;
+    }
+    .svc-block-tag { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .svc-block-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .svc-block-desc { font-size: 14px; color: var(--text2); line-height: 1.7; max-width: 540px; }
+    .svc-block-feats {
+      padding: 28px 36px; background: var(--surface);
+      display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 16px;
+    }
+    .feat { display: flex; align-items: flex-start; gap: 12px; }
+    .feat-check {
+      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
+      background: var(--gold-dim); border: 1px solid rgba(201,146,42,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: var(--gold);
+    }
+    .feat-text { font-size: 13px; color: var(--text2); line-height: 1.55; }
+    .feat-text b { color: var(--text); font-weight: 600; display: block; margin-bottom: 2px; }
+
+    /* ════════════════════════════
+       CONTACT
+    ════════════════════════════ */
+    .ch-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 20px; margin-bottom: 48px; }
+    .ch-card {
+      padding: 36px 32px;
+      display: flex; flex-direction: column; gap: 16px;
+      text-decoration: none;
+    }
+    .ch-card.email:hover { border-color: rgba(201,146,42,0.4) !important; }
+    .ch-card.wa:hover    { border-color: rgba(37,211,102,0.35) !important; }
+    .ch-ico { width: 58px; height: 58px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+    .ch-card.email .ch-ico { background: rgba(201,146,42,0.1); }
+    .ch-card.wa    .ch-ico { background: var(--green-dim); }
+    .ch-type { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text3); }
+    .ch-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+    .ch-card.email .ch-val { color: var(--gold2); }
+    .ch-card.wa    .ch-val { color: var(--wa); }
+    .ch-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
+    .ch-cta { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: auto; padding-top: 8px; }
+    .ch-card.email .ch-cta { color: var(--gold); }
+    .ch-card.wa    .ch-cta { color: var(--wa); }
+
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 14px; margin-bottom: 48px; }
+    .info-card { padding: 22px 24px; }
+    .info-ico { font-size: 20px; margin-bottom: 12px; }
+    .info-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .info-val { font-size: 13px; color: var(--text2); line-height: 1.55; }
+    .info-val mark { background: none; color: var(--gold2); font-weight: 600; }
+
+    /* ── RESPONSIVE ── */
+
+    /* Tablet (≤900px) */
+    @media (max-width: 900px) {
+      header { padding: 0 32px; }
+      .home-hero { padding: 80px 32px 60px; }
+      .stats-bar { padding: 0 32px; }
+      .section { padding: 0 32px; }
+      .contact-row { padding: 0 32px 64px; }
+    }
+
+    /* Mobile (≤640px) */
+    @media (max-width: 640px) {
+      /* Header — keep logo + hamburger-style compact nav */
+      header {
+        padding: 0 18px; height: 60px;
+        justify-content: space-between;
+      }
+      .logo-name { font-size: 13px; }
+      .logo-sub  { display: none; }
+      nav { gap: 0; }
+      nav a {
+        padding: 6px 9px;
+        font-size: 11.5px;
+        letter-spacing: 0;
+      }
+
+      /* Hero */
+      .home-hero {
+        padding: 52px 18px 44px;
+        text-align: center;
+      }
+      .home-hero .lead { max-width: 100%; }
+      .hero-actions {
+        justify-content: center;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .hero-actions .btn { text-align: center; justify-content: center; }
+      .hero-badge { display: none; }
+
+      /* Stats */
+      .stats-bar { padding: 0 18px; margin-bottom: 56px; }
+      .stats-inner { grid-template-columns: repeat(2,1fr); }
+      .stat-cell { padding: 22px 16px; }
+      .stat-cell:nth-child(2) { border-right: none; }
+      .stat-cell:nth-child(3) { border-top: 1px solid var(--border); }
+      .stat-cell:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .stat-num { font-size: 30px; }
+
+      /* Sections */
+      .section { padding: 0 18px; }
+      .section + .section { margin-top: 56px; }
+
+      /* Service cards on home */
+      .svc-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .svc-card { padding: 20px 16px; }
+      .svc-ico  { width: 40px; height: 40px; font-size: 18px; margin-bottom: 12px; }
+      .svc-name { font-size: 13px; }
+      .svc-desc { font-size: 12px; }
+
+      /* Why grid */
+      .why-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .why-card { padding: 20px 16px; }
+
+      /* CTA band */
+      .cta-band { flex-direction: column; padding: 28px 20px; text-align: center; gap: 20px; }
+      .cta-band .btn { width: 100%; justify-content: center; }
+
+      /* Testimonials */
+      .testi-grid { grid-template-columns: 1fr; }
+
+      /* Contact row pills */
+      .contact-row { padding: 0 18px 56px; margin-top: 48px; }
+      .contact-pills { flex-direction: column; }
+      .contact-pill { min-width: unset; }
+
+      /* Track page */
+      .track-search input { font-size: 13px; letter-spacing: 1px; padding: 16px 16px; }
+      .track-search button { padding: 16px 20px; font-size: 12px; }
+
+      /* Result card */
+      .rc-header { padding: 20px 18px; }
+      .rc-name   { font-size: 15px; }
+      .rc-meta   { grid-template-columns: 1fr 1fr; }
+      .rc-meta-item { padding: 14px 16px; }
+      .rc-meta-item:nth-child(2) { border-right: none; }
+      .rc-meta-item:nth-child(3) {
+        grid-column: 1 / -1;
+        border-right: none;
+        border-top: 1px solid var(--border);
+      }
+      .rc-timeline { padding: 24px 18px; }
+
+      /* Services page */
+      .svc-block-head { flex-direction: column; gap: 16px; padding: 22px 18px; }
+      .svc-block-feats { padding: 18px; grid-template-columns: 1fr; gap: 12px; }
+
+      /* Contact page */
+      .ch-grid { grid-template-columns: 1fr; }
+      .ch-card { padding: 26px 22px; }
+      .info-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .info-card { padding: 16px 14px; }
+
+      /* Footer */
+      footer { padding: 22px 18px; font-size: 11px; }
+    }
+
+    /* Very small phones (≤380px) */
+    @media (max-width: 380px) {
+      nav a { padding: 5px 7px; font-size: 11px; }
+      .svc-grid  { grid-template-columns: 1fr; }
+      .why-grid  { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+      .stat-num  { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow-1"></div>
+<div class="bg-glow-2"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo" onclick="navigate('home')">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/>
+        <polyline points="12 12 12 16 14 18"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-name">Swift Ship Logistics</div>
+      <div class="logo-sub">Global Freight</div>
+    </div>
+  </div>
+  <nav>
+    <a id="nav-home"     onclick="navigate('home')">Home</a>
+    <a id="nav-track"    onclick="navigate('track')">Track</a>
+    <a id="nav-services" onclick="navigate('services')">Services</a>
+    <a id="nav-contact"  onclick="navigate('contact')">Contact</a>
+  </nav>
+</header>
+
+<!-- ══════════════════════════════
+     HOME
+══════════════════════════════ -->
+<div id="page-home" class="page">
+
+  <div class="home-hero">
+    <div class="hero-badge"><div class="hero-badge-dot"></div>Global Freight · Delivered</div>
+    <div class="display">Moving Cargo<br/><em>Across Every Ocean</em></div>
+    <p class="lead">Swift Ship Logistics connects businesses to global markets with reliable ocean, air, and ground freight — tracked in real time, every mile of the way.</p>
+    <div class="hero-actions">
+      <button class="btn btn-gold" onclick="navigate('track')">Track a Shipment →</button>
+      <button class="btn btn-outline" onclick="navigate('services')">Our Services</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-cell"><div class="stat-num">120+</div><div class="stat-lbl">Countries Served</div></div>
+      <div class="stat-cell"><div class="stat-num">50K+</div><div class="stat-lbl">Shipments Delivered</div></div>
+      <div class="stat-cell"><div class="stat-num">98.7%</div><div class="stat-lbl">On-Time Rate</div></div>
+      <div class="stat-cell"><div class="stat-num">24/7</div><div class="stat-lbl">Live Support</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow">What We Offer</div>
+    <div class="display" style="font-size:clamp(32px,4vw,46px); margin-bottom:32px;">Freight Solutions<br/>Built For You</div>
+    <div class="svc-grid">
+      <div class="card svc-card" onclick="navigate('services')">
+        <div class="svc-ico">✈️</div>
+        <div class="svc-name">Express Air Freight</div>
+        <div class="svc-desc">Time-critical shipments delivered fast via our global airline network with priority handling.</div>
+      </div>
+      <div class="card svc-card" onclick="navigate('services')">
+        <div class="svc-ico">🚢</div>
+        <div class="svc-name">Ocean Freight</div>
+        <div class="svc-desc">FCL and LCL loads handled with precision across all major international trade lanes.</div>
+      </div>
+      <div class="card svc-card" onclick="navigate('services')">
+        <div class="svc-ico">📦</div>
+        <div class="svc-name">Air Cargo</div>
+        <div class="svc-desc">Reliable air cargo for bulk commercial shipments requiring fast intercontinental transit.</div>
+      </div>
+      <div class="card svc-card" onclick="navigate('services')">
+        <div class="svc-ico">🛃</div>
+        <div class="svc-name">Customs Clearance</div>
+        <div class="svc-desc">Expert brokerage ensuring smooth border crossings and full regulatory compliance.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:80px;">
+    <div class="eyebrow">Why Swift Ship</div>
+    <div class="display" style="font-size:clamp(32px,4vw,46px); margin-bottom:32px;">The Advantage<br/><em>You Deserve</em></div>
+    <div class="why-grid">
+      <div class="card why-card"><div class="why-ico">📡</div><div class="why-title">Real-Time Tracking</div><div class="why-desc">Live updates at every milestone. Know exactly where your cargo is, always.</div></div>
+      <div class="card why-card"><div class="why-ico">🔐</div><div class="why-title">Secure Handling</div><div class="why-desc">Every shipment is insured and handled by trained logistics professionals.</div></div>
+      <div class="card why-card"><div class="why-ico">🌐</div><div class="why-title">Global Network</div><div class="why-desc">Partnerships with top carriers across 120+ countries and all major ports.</div></div>
+      <div class="card why-card"><div class="why-ico">💬</div><div class="why-title">Dedicated Support</div><div class="why-desc">Reach our team anytime via email or WhatsApp — a real person, never a bot.</div></div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:80px;">
+    <div class="cta-band">
+      <div>
+        <div class="cta-band-eyebrow">Shipment Tracking</div>
+        <h2>Know Exactly Where<br/>Your Cargo Is</h2>
+        <p>Enter your tracking code for instant real-time updates.</p>
+      </div>
+      <button class="btn btn-gold" onclick="navigate('track')">Track Now →</button>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:80px;">
+    <div class="eyebrow">Client Stories</div>
+    <div class="display" style="font-size:clamp(32px,4vw,46px); margin-bottom:32px;">Trusted Worldwide</div>
+    <div class="testi-grid">
+      <div class="card testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Our ocean freight from Dubai cleared US customs ahead of schedule. Swift Ship's team kept us informed every step — truly outstanding service.</p>
+        <div class="testi-author"><div class="testi-avatar">JM</div><div><div class="testi-name">James M.</div><div class="testi-role">Import Manager, RetailCo USA</div></div></div>
+      </div>
+      <div class="card testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">The express air shipment arrived a full day early. The tracking portal is clean, WhatsApp support is instant. We won't use anyone else.</p>
+        <div class="testi-author"><div class="testi-avatar">SP</div><div><div class="testi-name">Sofia P.</div><div class="testi-role">Operations Director, TechParts EU</div></div></div>
+      </div>
+      <div class="card testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Handled our industrial crate from Sydney to Singapore without a scratch. Customs paperwork was seamless. Swift Ship handles all our freight now.</p>
+        <div class="testi-author"><div class="testi-avatar">AK</div><div><div class="testi-name">Alex K.</div><div class="testi-role">Supply Chain Lead, MineCore AU</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="contact-row-label">Need Assistance</div>
+    <div class="contact-pills">
+      <a class="contact-pill email" href="mailto:Swiftshiplog1@gmail.com">
+        <div class="cp-icon">✉️</div>
+        <div><div class="cp-label">Email</div><div class="cp-value">Swiftshiplog1@gmail.com</div></div>
+        <div class="cp-arrow">→</div>
+      </a>
+      <a class="contact-pill wa" href="https://wa.me/12135466916" target="_blank" rel="noopener">
+        <div class="cp-icon">💬</div>
+        <div><div class="cp-label">WhatsApp</div><div class="cp-value">+1 (213) 546-6916</div></div>
+        <div class="cp-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <footer>© 2026 Swift Ship Logistics. All rights reserved.</footer>
+</div>
+
+<!-- ══════════════════════════════
+     TRACK
+══════════════════════════════ -->
+<div id="page-track" class="page">
+  <div class="section" style="padding-top:72px; padding-bottom:80px;">
+    <div class="eyebrow">Shipment Tracking</div>
+    <div class="display">Track Your<br/><em>Shipment</em></div>
+    <p class="lead" style="margin-bottom:40px;">Enter your tracking code below to get a full real-time status update on your cargo's journey.</p>
+
+    <div class="track-search">
+      <input type="text" id="trackingInput" placeholder="Enter tracking code  (e.g. BX7TQ29NKA)" maxlength="20" />
+      <button onclick="trackPackage()">Track →</button>
+    </div>
+    <div class="track-hint">🔒 All shipment data is encrypted and secure.</div>
+
+    <div class="err-msg" id="errorMsg">⚠️&nbsp; No shipment found for that code. Please check and try again.</div>
+
+    <div class="result-card" id="resultCard">
+      <div class="rc-header">
+        <div>
+          <div class="rc-code" id="displayCode"></div>
+          <div class="rc-name" id="packageName"></div>
+        </div>
+        <div class="status-pill" id="statusBadge"><div class="sp-dot"></div><span id="statusLabel"></span></div>
+      </div>
+      <div class="rc-meta">
+        <div class="rc-meta-item"><div class="rc-meta-label">Origin</div><div class="rc-meta-val" id="etaOrigin">–</div></div>
+        <div class="rc-meta-item"><div class="rc-meta-label">Destination</div><div class="rc-meta-val" id="etaDest">–</div></div>
+        <div class="rc-meta-item"><div class="rc-meta-label">Service</div><div class="rc-meta-val" id="etaService">–</div></div>
+      </div>
+      <div class="rc-timeline">
+        <div class="tl-heading">Shipment Journey</div>
+        <div id="stepsContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="contact-row-label">Need Assistance</div>
+    <div class="contact-pills">
+      <a class="contact-pill email" href="mailto:Swiftshiplog1@gmail.com">
+        <div class="cp-icon">✉️</div>
+        <div><div class="cp-label">Email</div><div class="cp-value">Swiftshiplog1@gmail.com</div></div>
+        <div class="cp-arrow">→</div>
+      </a>
+      <a class="contact-pill wa" href="https://wa.me/12135466916" target="_blank" rel="noopener">
+        <div class="cp-icon">💬</div>
+        <div><div class="cp-label">WhatsApp</div><div class="cp-value">+1 (213) 546-6916</div></div>
+        <div class="cp-arrow">→</div>
+      </a>
+    </div>
+  </div>
+  <footer>© 2026 Swift Ship Logistics. All rights reserved.</footer>
+</div>
+
+<!-- ══════════════════════════════
+     SERVICES
+══════════════════════════════ -->
+<div id="page-services" class="page">
+  <div class="section" style="padding-top:72px; padding-bottom:80px;">
+    <div class="eyebrow">What We Offer</div>
+    <div class="display" style="margin-bottom:48px;">Our <em>Services</em></div>
+
+    <div class="svc-block card">
+      <div class="svc-block-head">
+        <div class="svc-block-ico">✈️</div>
+        <div>
+          <div class="svc-block-tag">Speed · Priority</div>
+          <div class="svc-block-title">Express Air Freight</div>
+          <p class="svc-block-desc">When time is the priority, our express air freight service delivers. We partner with major airlines worldwide to offer next-flight-out and time-definite delivery for urgent commercial and personal shipments.</p>
+        </div>
+      </div>
+      <div class="svc-block-feats">
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Priority Boarding</b>First-on, first-off handling at every hub.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>150+ Airline Partners</b>Global coverage on major carriers worldwide.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Real-Time Tracking</b>Live updates from pickup to final delivery.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Door-to-Door</b>Full pickup and last-mile delivery included.</div></div>
+      </div>
+    </div>
+
+    <div class="svc-block card">
+      <div class="svc-block-head">
+        <div class="svc-block-ico">🚢</div>
+        <div>
+          <div class="svc-block-tag">Volume · Economy</div>
+          <div class="svc-block-title">Ocean Freight</div>
+          <p class="svc-block-desc">The most cost-effective solution for large commercial shipments. We handle Full Container Loads (FCL) and Less-than-Container Loads (LCL) across all major international trade lanes including Asia, Europe, the Americas, and the Middle East.</p>
+        </div>
+      </div>
+      <div class="svc-block-feats">
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>FCL & LCL</b>Flexible container options for any cargo volume.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Major Trade Lanes</b>Coverage across all key global shipping routes.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Port-to-Port or Door</b>Flexible delivery scopes to fit your needs.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Cargo Insurance</b>Full insurance options for complete peace of mind.</div></div>
+      </div>
+    </div>
+
+    <div class="svc-block card">
+      <div class="svc-block-head">
+        <div class="svc-block-ico">📦</div>
+        <div>
+          <div class="svc-block-tag">Bulk · Intercontinental</div>
+          <div class="svc-block-title">Air Cargo</div>
+          <p class="svc-block-desc">For larger commercial shipments that still require air speed, our air cargo service offers reliable scheduled flights for heavy and oversized freight across intercontinental routes.</p>
+        </div>
+      </div>
+      <div class="svc-block-feats">
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Heavy & Oversized</b>Specialized handling for large cargo types.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Scheduled Flights</b>Consistent, reliable departure times guaranteed.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Temperature Control</b>Cold-chain options for sensitive goods.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Secure Facilities</b>Bonded warehouse storage at key global hubs.</div></div>
+      </div>
+    </div>
+
+    <div class="svc-block card">
+      <div class="svc-block-head">
+        <div class="svc-block-ico">🛃</div>
+        <div>
+          <div class="svc-block-tag">Compliance · Brokerage</div>
+          <div class="svc-block-title">Customs Clearance</div>
+          <p class="svc-block-desc">Navigating international customs can be complex. Our licensed brokers manage all documentation, duties, and compliance requirements so your shipment clears borders without delay or complication.</p>
+        </div>
+      </div>
+      <div class="svc-block-feats">
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Licensed Brokers</b>Certified professionals in key import/export markets.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Full Documentation</b>HS codes, invoices, and permits handled for you.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Duties Management</b>Accurate duty calculation and payment processing.</div></div>
+        <div class="feat"><div class="feat-check">✓</div><div class="feat-text"><b>Regulatory Compliance</b>Always up-to-date with international trade law.</div></div>
+      </div>
+    </div>
+
+    <div class="cta-band" style="margin-top:48px;">
+      <div>
+        <div class="cta-band-eyebrow">Get Started</div>
+        <h2>Ready to Ship With Us?</h2>
+        <p>Contact our team or track an existing shipment right now.</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-gold" onclick="navigate('contact')">Contact Us →</button>
+        <button class="btn btn-ghost" onclick="navigate('track')">Track Shipment</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="contact-row-label">Need Assistance</div>
+    <div class="contact-pills">
+      <a class="contact-pill email" href="mailto:Swiftshiplog1@gmail.com">
+        <div class="cp-icon">✉️</div>
+        <div><div class="cp-label">Email</div><div class="cp-value">Swiftshiplog1@gmail.com</div></div>
+        <div class="cp-arrow">→</div>
+      </a>
+      <a class="contact-pill wa" href="https://wa.me/12135466916" target="_blank" rel="noopener">
+        <div class="cp-icon">💬</div>
+        <div><div class="cp-label">WhatsApp</div><div class="cp-value">+1 (213) 546-6916</div></div>
+        <div class="cp-arrow">→</div>
+      </a>
+    </div>
+  </div>
+  <footer>© 2026 Swift Ship Logistics. All rights reserved.</footer>
+</div>
+
+<!-- ══════════════════════════════
+     CONTACT
+══════════════════════════════ -->
+<div id="page-contact" class="page">
+  <div class="section" style="padding-top:72px; padding-bottom:80px;">
+    <div class="eyebrow">Get In Touch</div>
+    <div class="display" style="margin-bottom:16px;">We're Here<br/><em>To Help</em></div>
+    <p class="lead" style="margin-bottom:48px;">Have a question about a shipment, need a freight quote, or want to learn more? Our team responds fast — always a real person.</p>
+
+    <div class="ch-grid">
+      <a class="card ch-card email" href="mailto:Swiftshiplog1@gmail.com">
+        <div class="ch-ico">✉️</div>
+        <div><div class="ch-type">Email</div><div class="ch-val">Swiftshiplog1@gmail.com</div></div>
+        <p class="ch-desc">Send us an email for quotes, documentation, customs inquiries, or any general question. We typically respond within a few hours.</p>
+        <div class="ch-cta">Send Email →</div>
+      </a>
+      <a class="card ch-card wa" href="https://wa.me/12135466916" target="_blank" rel="noopener">
+        <div class="ch-ico">💬</div>
+        <div><div class="ch-type">WhatsApp</div><div class="ch-val">+1 (213) 546-6916</div></div>
+        <p class="ch-desc">Prefer a quick message? Chat directly on WhatsApp for fast support, tracking help, or urgent shipment updates.</p>
+        <div class="ch-cta">Message Us →</div>
+      </a>
+    </div>
+
+    <div class="info-grid">
+      <div class="card info-card"><div class="info-ico">🕐</div><div class="info-title">Response Time</div><div class="info-val">Email within <mark>2–4 hours</mark>. WhatsApp typically faster.</div></div>
+      <div class="card info-card"><div class="info-ico">🌍</div><div class="info-title">Languages</div><div class="info-val">Support in <mark>English</mark> and <mark>Arabic</mark>.</div></div>
+      <div class="card info-card"><div class="info-ico">📋</div><div class="info-title">Quote Requests</div><div class="info-val">Include cargo type, weight, and origin/destination for the fastest response.</div></div>
+      <div class="card info-card"><div class="info-ico">🔍</div><div class="info-title">Tracking Support</div><div class="info-val">Have your <mark>tracking code</mark> ready when reaching out about a shipment.</div></div>
+    </div>
+
+    <div class="cta-band">
+      <div>
+        <div class="cta-band-eyebrow">Already Shipped?</div>
+        <h2>Track Your Shipment Now</h2>
+        <p>Use your tracking code to get live status updates on your cargo.</p>
+      </div>
+      <button class="btn btn-gold" onclick="navigate('track')">Track Now →</button>
+    </div>
+  </div>
+  <footer>© 2026 Swift Ship Logistics. All rights reserved.</footer>
+</div>
+
+<script>
+  /* ── NAVIGATION ── */
+  function navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.getElementById('nav-' + page).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  navigate('home');
+
+  /* ── SHIPMENT DATA — Dubai → New York, Ocean Freight, no timestamps ── */
+  function steps(active, cargo) {
+    const all = [
+      { name: "Order Confirmed",              detail: "Freight booking confirmed with Swift Ship Logistics. Shipment scheduled for pickup at Jebel Ali Port facility." },
+      { name: "Picked Up",                    detail: `${cargo} collected and sealed at Jebel Ali Port warehouse, Dubai. Pre-departure inspection passed.` },
+      { name: "Customs Clearance — Export",   detail: "UAE export customs documentation approved and cleared. All HS codes and commercial invoices verified." },
+      { name: "Departed Port of Jebel Ali",   detail: "Vessel has set sail from Jebel Ali Port, Dubai. Transiting the Red Sea and Suez Canal en route to the Atlantic." },
+      { name: "In Transit — Atlantic Ocean",  detail: "Vessel has cleared the Suez Canal and is crossing the Atlantic Ocean. On schedule for arrival at Port of New York." },
+      { name: "Arrived Port of New York",     detail: "Vessel berthed at Port of New York & New Jersey. Cargo offloaded and moved to the customs examination area." },
+      { name: "Out for Delivery",             detail: "US Customs cleared. Cargo loaded onto delivery truck for final-mile delivery in New York, NY." },
+      { name: "Delivered",                    detail: "Shipment successfully delivered and signed for at the destination address in New York, NY." },
+    ];
+    return all;
+  }
+
+  function entry(cargo, active) {
+    return {
+      name: cargo,
+      status: active === 7 ? "delivered" : "in-transit",
+      origin: "Dubai, UAE", dest: "New York, NY",
+      service: "Ocean Freight", activeStep: active,
+      steps: steps(active, cargo)
+    };
+  }
+
+  const shipments = {
+    // Stage 0 — Order Confirmed
+    "BX7TQ29NKA": entry("Electronics Components · 4 pallets", 0),
+    "KP4MW83ZYE": entry("Apparel & Textiles · 6 bales", 0),
+    "YN6RD51HCF": entry("Industrial Spare Parts · 2 crates", 0),
+    "GT2JV70XBM": entry("Medical Equipment · 1 pallet", 0),
+    "ZA8LE34QPW": entry("Construction Materials · 10 pallets", 0),
+    // Stage 1 — Picked Up
+    "MH5CX92RVT": entry("Automotive Parts · 3 crates", 1),
+    "WQ3NU67FDK": entry("Retail Goods · 8 boxes", 1),
+    "RF9PB45SLJ": entry("Chemical Supplies · 5 drums", 1),
+    "CV1DT58GXU": entry("Luxury Furniture · 2 pieces", 1),
+    "NG0AK16EZB": entry("Food & Beverage · 12 pallets", 1),
+    // Stage 2 — Customs Export
+    "TR4KD82WPN": entry("Pharmaceutical Goods · 3 pallets", 2),
+    "VJ6NE51HGQ": entry("Machinery Parts · 4 crates", 2),
+    "LW9AF34XCM": entry("Consumer Electronics · 6 boxes", 2),
+    "QB2ST67YRD": entry("Steel Pipes · 1 FCL container", 2),
+    "DF5PG90KUZ": entry("Plastic Raw Materials · 8 pallets", 2),
+    // Stage 3 — Departed Jebel Ali
+    "HE7MB23FLV": entry("Commercial Goods · 6 pallets", 3),
+    "NX1GC78ZTQ": entry("Sporting Equipment · 5 boxes", 3),
+    "SW4JH45RAB": entry("Packaging Materials · 10 pallets", 3),
+    "OC6KF12VEY": entry("Frozen Seafood · 3 reefer pallets", 3),
+    "PM9UL56DGH": entry("Clothing & Accessories · 7 bales", 3),
+    // Stage 4 — In Transit
+    "FA3RC29NWX": entry("Electrical Equipment · 5 pallets", 4),
+    "IB7YD64KSP": entry("Glass Products · 2 crates", 4),
+    "UG2QE87MJT": entry("Agricultural Products · 9 bags", 4),
+    "CZ5WF31BHO": entry("Toys & Games · 4 pallets", 4),
+    "RK8XA59LCN": entry("Homeware & Decor · 6 boxes", 4),
+    // Stage 5 — Arrived Port of NY
+    "TH1NB74QPE": entry("Office Furniture · 3 pallets", 5),
+    "EV4MC28FZK": entry("Cosmetics · 5 boxes", 5),
+    "JO7GD53RYW": entry("Industrial Cables · 4 reels", 5),
+    "XM2PF91UBL": entry("Sportswear · 8 bales", 5),
+    "AS5KH67VGT": entry("Ceramic Tiles · 1 FCL container", 5),
+    // Stage 6 — Out for Delivery
+    "WD3LR58NXQ": entry("Electronics Accessories · 3 boxes", 6),
+    "FQ6TE21MBP": entry("Jewelry & Accessories · 2 cases", 6),
+    "YR9GV44ZHC": entry("Dry Food Products · 6 pallets", 6),
+    "BN4HW89KOA": entry("Cleaning Supplies · 5 pallets", 6),
+    "ZU7CF32SJV": entry("Medical Supplies · 2 pallets", 6),
+    // Stage 7 — Delivered
+    "QP2XM75DKE": entry("Commercial Goods · 8 pallets", 7),
+    "HV5NB38GYT": entry("Auto Accessories · 4 crates", 7),
+    "OL8RA61WFX": entry("Furniture Components · 3 pallets", 7),
+    "IC3SE94UBQ": entry("Food Ingredients · 7 sacks", 7),
+    "GT1JD47LNZ": entry("Plastic Products · 5 pallets", 7),
+  };
+
+  /* ── TRACK FUNCTION ── */
+  function trackPackage() {
+    const code = document.getElementById('trackingInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const card = document.getElementById('resultCard');
+    const err  = document.getElementById('errorMsg');
+    card.classList.remove('show');
+    err.classList.remove('show');
+    if (!code) return;
+
+    const data = shipments[code];
+    if (!data) { err.classList.add('show'); return; }
+
+    document.getElementById('displayCode').textContent = code;
+    document.getElementById('packageName').textContent = data.name;
+    document.getElementById('etaOrigin').textContent   = data.origin;
+    document.getElementById('etaDest').textContent     = data.dest;
+    document.getElementById('etaService').textContent  = data.service;
+
+    const badge = document.getElementById('statusBadge');
+    badge.className = 'status-pill ' + data.status;
+    document.getElementById('statusLabel').textContent = data.status === 'delivered' ? 'Delivered' : 'In Transit';
+
+    const container = document.getElementById('stepsContainer');
+    container.innerHTML = '';
+    data.steps.forEach((s, i) => {
+      const isDone   = i < data.activeStep;
+      const isActive = i === data.activeStep;
+      const cls  = isDone ? 'done' : isActive ? 'active' : 'future';
+      const icon = isDone ? '✓' : isActive ? '●' : '';
+      const div  = document.createElement('div');
+      div.className = `tl-step ${cls}`;
+      div.innerHTML = `
+        <div class="tl-line"></div>
+        <div class="tl-node">${icon}</div>
+        <div class="tl-body">
+          <div class="tl-name">${s.name}</div>
+          <div class="tl-detail">${s.detail}</div>
+        </div>`;
+      container.appendChild(div);
+      setTimeout(() => div.classList.add('in'), i * 70 + 80);
+    });
+
+    card.classList.add('show');
+    setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+
+  document.getElementById('trackingInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') trackPackage();
+  });
+</script>
+</body>
+</html>
