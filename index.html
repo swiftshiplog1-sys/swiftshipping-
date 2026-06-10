@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swift Ship Logistics — Global Freight Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#070d1a; --s1:#0d1526; --s2:#111e33; --s3:#16263d;
+      --bd:rgba(255,255,255,0.06); --bd2:rgba(255,255,255,0.11);
+      --gold:#c9922a; --gold2:#e8b455; --gdim:rgba(201,146,42,0.12);
+      --tx:#dce8f5; --tx2:#8ca3bf; --tx3:#4e6585;
+      --grn:#22c87a; --gdim2:rgba(34,200,122,0.1); --wa:#25D366;
+      --red:#f04a4a; --reddim:rgba(240,74,74,0.1);
+      --r:14px; --rl:20px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+    /* BG */
+    .bg-noise{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E")}
+    .bg-g1{position:fixed;top:-300px;right:-200px;z-index:0;pointer-events:none;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(201,146,42,.07) 0%,transparent 65%)}
+    .bg-g2{position:fixed;bottom:-200px;left:-150px;z-index:0;pointer-events:none;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(34,200,122,.04) 0%,transparent 65%)}
+
+    /* HEADER */
+    header{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:68px;background:rgba(7,13,26,.96);backdrop-filter:blur(24px) saturate(1.6);border-bottom:1px solid rgba(201,146,42,.1);box-shadow:0 4px 32px rgba(0,0,0,.3)}
+    .logo{display:flex;align-items:center;gap:11px;cursor:pointer;user-select:none;text-decoration:none}
+    .logo-mark{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(201,146,42,.35)}
+    .logo-mark svg{width:18px;height:18px}
+    .logo-name{font-size:14px;font-weight:700;letter-spacing:.2px;color:var(--tx);line-height:1.2}
+    .logo-sub{font-size:9.5px;color:var(--tx3);letter-spacing:1.8px;text-transform:uppercase}
+    nav{display:flex;align-items:center;gap:2px}
+    nav a{font-size:13px;font-weight:500;color:var(--tx2);padding:7px 16px;border-radius:8px;cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:none;letter-spacing:.2px;transition:color .2s,background .2s}
+    nav a:hover{color:var(--tx);background:rgba(255,255,255,.05)}
+    nav a.active{color:var(--gold2);background:var(--gdim)}
+
+    /* PAGE SYSTEM */
+    .page{display:none;position:relative;z-index:5}
+    .page.active{display:block;animation:pgIn .38s cubic-bezier(.22,1,.36,1) both}
+    @keyframes pgIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+    /* TYPOGRAPHY */
+    .eyebrow{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+    .display{font-family:'Playfair Display',serif;font-size:clamp(38px,5.5vw,64px);font-weight:700;line-height:1.06;color:var(--tx);letter-spacing:-.5px;margin-bottom:16px}
+    .display em{font-style:normal;color:var(--gold2)}
+    .lead{font-size:15.5px;font-weight:300;color:var(--tx2);line-height:1.8;max-width:480px}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;letter-spacing:.3px;padding:12px 26px;border-radius:10px;cursor:pointer;border:none;text-decoration:none;transition:all .2s;white-space:nowrap}
+    .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#070d1a;box-shadow:0 4px 16px rgba(201,146,42,.22)}
+    .btn-gold:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 28px rgba(201,146,42,.35)}
+    .btn-outline{background:transparent;color:var(--tx);border:1px solid var(--bd2)}
+    .btn-outline:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.2);transform:translateY(-1px)}
+    .btn-ghost{background:var(--s2);color:var(--tx2);border:1px solid var(--bd)}
+    .btn-ghost:hover{color:var(--tx);border-color:var(--bd2)}
+    .btn-red{background:var(--reddim);color:var(--red);border:1px solid rgba(240,74,74,.2)}
+    .btn-red:hover{background:rgba(240,74,74,.18);border-color:rgba(240,74,74,.4)}
+    .btn-green{background:rgba(34,200,122,.1);color:var(--grn);border:1px solid rgba(34,200,122,.2)}
+    .btn-green:hover{background:rgba(34,200,122,.18)}
+    .btn-sm{padding:7px 14px;font-size:12px}
+    .btn-xs{padding:5px 10px;font-size:11px;border-radius:7px}
+
+    /* CARD */
+    .card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);transition:border-color .3s,transform .3s,box-shadow .3s}
+    .card:hover{border-color:rgba(201,146,42,.2);transform:translateY(-3px);box-shadow:0 20px 56px rgba(0,0,0,.4)}
+
+    /* LAYOUT */
+    .wrap{max-width:960px;margin:0 auto;padding:0 32px}
+
+    /* CONTACT ROW */
+    .contact-row{max-width:960px;margin:60px auto 0;padding:0 32px 72px}
+    .cr-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--tx3);margin-bottom:16px}
+    .cr-pills{display:flex;gap:12px;flex-wrap:wrap}
+    .cr-pill{display:flex;align-items:center;gap:13px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:15px 20px;flex:1;min-width:200px;text-decoration:none;transition:border-color .2s,transform .2s,box-shadow .2s}
+    .cr-pill:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+    .cr-pill.em:hover{border-color:rgba(201,146,42,.4)}
+    .cr-pill.wa:hover{border-color:rgba(37,211,102,.35)}
+    .cr-ico{width:38px;height:38px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px}
+    .cr-pill.em .cr-ico{background:rgba(201,146,42,.1)}
+    .cr-pill.wa .cr-ico{background:var(--gdim2)}
+    .cr-lbl{font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:2px}
+    .cr-val{font-size:13px;font-weight:600}
+    .cr-pill.em .cr-val{color:var(--gold2)}
+    .cr-pill.wa .cr-val{color:var(--wa)}
+    .cr-arr{margin-left:auto;color:var(--tx3);font-size:15px;flex-shrink:0}
+
+    /* FOOTER */
+    footer{position:relative;z-index:5;border-top:1px solid var(--bd);padding:24px 32px;text-align:center;font-size:12px;color:var(--tx3);letter-spacing:.4px}
+
+    /* ═══════════ HOME ═══════════ */
+    .hero-wrap{max-width:960px;margin:0 auto;padding:96px 32px 68px}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--gdim);border:1px solid rgba(201,146,42,.22);border-radius:100px;padding:6px 15px;margin-bottom:26px;font-size:11px;font-weight:600;color:var(--gold2);letter-spacing:1.5px;text-transform:uppercase}
+    .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold2);animation:dot 2s infinite}
+    @keyframes dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+    .hero-wrap .display{font-size:clamp(44px,6.5vw,78px)}
+    .hero-actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:36px}
+
+    .stats-bar{max-width:960px;margin:0 auto 76px;padding:0 32px}
+    .stats-inner{display:grid;grid-template-columns:repeat(4,1fr);background:var(--s1);border:1px solid rgba(201,146,42,.14);border-radius:var(--rl);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+    .s-cell{padding:30px 20px;text-align:center;border-right:1px solid var(--bd);background:linear-gradient(180deg,var(--s2) 0%,var(--s1) 100%);transition:background .3s}
+    .s-cell:hover{background:linear-gradient(180deg,rgba(201,146,42,.07) 0%,var(--s1) 100%)}
+    .s-cell:last-child{border-right:none}
+    .s-num{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--gold2);line-height:1;margin-bottom:7px;text-shadow:0 2px 16px rgba(201,146,42,.2)}
+    .s-lbl{font-size:10.5px;font-weight:600;color:var(--tx3);letter-spacing:1.6px;text-transform:uppercase}
+
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+    .svc-card{padding:26px;cursor:pointer}
+    .svc-ico{width:46px;height:46px;border-radius:11px;background:var(--gdim);border:1px solid rgba(201,146,42,.18);display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:16px}
+    .svc-name{font-size:14.5px;font-weight:600;color:var(--tx);margin-bottom:7px}
+    .svc-desc{font-size:13px;color:var(--tx2);line-height:1.65}
+
+    .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+    .why-card{padding:24px}
+    .why-ico{font-size:22px;margin-bottom:12px}
+    .why-title{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:6px}
+    .why-desc{font-size:13px;color:var(--tx2);line-height:1.65}
+
+    .cta-band{background:linear-gradient(110deg,rgba(201,146,42,.1) 0%,rgba(34,200,122,.06) 100%);border:1px solid rgba(201,146,42,.22);border-radius:var(--rl);padding:48px 44px;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;box-shadow:0 8px 36px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.04)}
+    .cta-ey{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:9px}
+    .cta-band h2{font-family:'Playfair Display',serif;font-size:clamp(24px,3.2vw,36px);font-weight:700;line-height:1.15;margin-bottom:6px}
+    .cta-band p{font-size:13.5px;color:var(--tx2);font-weight:300}
+
+    .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px}
+    .t-card{padding:26px}
+    .t-stars{color:var(--gold2);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+    .t-quote{font-size:13.5px;color:var(--tx2);line-height:1.75;font-style:italic;margin-bottom:20px;border-left:2px solid rgba(201,146,42,.25);padding-left:14px}
+    .t-author{display:flex;align-items:center;gap:11px}
+    .t-avatar{width:35px;height:35px;border-radius:50%;background:var(--s3);border:1px solid var(--bd2);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--gold);flex-shrink:0}
+    .t-name{font-size:13px;font-weight:600;color:var(--tx)}
+    .t-role{font-size:11px;color:var(--tx3);margin-top:2px}
+
+    /* ═══════════ TRACK ═══════════ */
+    .search-bar{display:flex;background:var(--s1);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:border-color .2s,box-shadow .2s}
+    .search-bar:focus-within{border-color:rgba(201,146,42,.5);box-shadow:0 0 0 4px rgba(201,146,42,.08),0 4px 20px rgba(0,0,0,.2)}
+    .search-bar input{flex:1;min-width:0;background:transparent;border:none;outline:none;padding:17px 22px;font-family:'Inter',monospace;font-size:15px;font-weight:500;color:var(--tx);letter-spacing:2px}
+    .search-bar input::placeholder{color:var(--tx3);font-weight:400;letter-spacing:.5px;font-size:13.5px}
+    .search-bar button{flex-shrink:0;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#070d1a;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;letter-spacing:.4px;padding:17px 28px;cursor:pointer;transition:filter .2s}
+    .search-bar button:hover{filter:brightness(1.1)}
+
+    .s-hint{font-size:12px;color:var(--tx3);margin-bottom:32px;display:flex;align-items:center;gap:6px}
+
+    .err-box{display:none;align-items:center;gap:10px;background:rgba(255,80,80,.06);border:1px solid rgba(255,80,80,.15);border-radius:var(--r);padding:15px 20px;font-size:13px;color:#ff7070;margin-bottom:24px}
+    .err-box.on{display:flex}
+
+    /* Result card */
+    .res-card{display:none;border:1px solid rgba(201,146,42,.16);border-radius:var(--rl);overflow:hidden;margin-bottom:56px;box-shadow:0 16px 56px rgba(0,0,0,.35);background:var(--s1)}
+    .res-card.on{display:block;animation:slideUp .45s cubic-bezier(.22,1,.36,1) both}
+    @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+    .rc-top{padding:22px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--bd);background:linear-gradient(135deg,var(--s2) 0%,rgba(22,38,61,.7) 100%)}
+    .rc-code{font-size:10px;font-weight:700;letter-spacing:4px;color:var(--tx3);text-transform:uppercase;font-family:'Inter',monospace;margin-bottom:6px}
+    .rc-name{font-size:17px;font-weight:600;color:var(--tx);letter-spacing:-.2px;line-height:1.3}
+    .s-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;margin-top:4px}
+    .s-pill.in-transit{background:rgba(201,146,42,.1);color:var(--gold2);border:1px solid rgba(201,146,42,.28)}
+    .s-pill.delivered{background:var(--gdim2);color:var(--grn);border:1px solid rgba(34,200,122,.28)}
+    .sp-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;animation:dot 2s infinite}
+
+    .rc-route{display:flex;align-items:center;padding:18px 28px;background:var(--s2);border-bottom:1px solid var(--bd);gap:0}
+    .rc-city{flex-shrink:0}
+    .rc-city-lbl{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:3px}
+    .rc-city-name{font-size:15px;font-weight:700;color:var(--tx);line-height:1.2}
+    .rc-city-sub{font-size:10.5px;color:var(--tx3);margin-top:2px}
+    .rc-line{flex:1;display:flex;align-items:center;padding:0 14px;min-width:0}
+    .rc-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
+    .rc-dash{flex:1;height:1px;background:linear-gradient(to right,var(--gold),rgba(201,146,42,.3))}
+    .rc-ship{font-size:19px;margin:0 8px;flex-shrink:0}
+    .rc-dash2{flex:1;height:1px;background:linear-gradient(to right,rgba(201,146,42,.3),var(--bd2))}
+    .rc-dot2{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--bd2);flex-shrink:0}
+
+    .rc-prog{padding:18px 28px 0;background:var(--s1);border-bottom:1px solid var(--bd)}
+    .rc-prog-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .rc-prog-lbl{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3)}
+    .rc-prog-pct{font-size:12px;font-weight:700;color:var(--gold2)}
+    .rc-prog-track{height:4px;background:var(--s3);border-radius:2px;margin-bottom:18px;overflow:hidden}
+    .rc-prog-fill{height:100%;border-radius:2px;background:linear-gradient(to right,var(--gold),var(--gold2));width:0%;transition:width .9s cubic-bezier(.22,1,.36,1)}
+
+    .rc-meta{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--bd);background:var(--s2)}
+    .rc-mi{padding:15px 22px;border-right:1px solid var(--bd)}
+    .rc-mi:last-child{border-right:none}
+    .rc-ml{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:5px}
+    .rc-mv{font-size:13.5px;font-weight:600;color:var(--tx)}
+    .rc-mv.hi{color:var(--gold2)}
+
+    .rc-tl{padding:30px 28px 8px;background:var(--s1)}
+    .tl-hd{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--tx3);margin-bottom:28px}
+    .tl-step{display:grid;grid-template-columns:30px 1fr;gap:0 18px;position:relative;opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s}
+    .tl-step.in{opacity:1;transform:translateX(0)}
+    .tl-step:not(:last-child) .tl-line{position:absolute;left:14px;top:31px;bottom:-4px;width:2px}
+    .tl-step.done:not(:last-child) .tl-line{background:linear-gradient(to bottom,rgba(201,146,42,.55),rgba(201,146,42,.1))}
+    .tl-step.active:not(:last-child) .tl-line{background:linear-gradient(to bottom,rgba(201,146,42,.3),var(--bd))}
+    .tl-step.future:not(:last-child) .tl-line{background:var(--bd)}
+    .tl-node{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;position:relative;z-index:1;flex-shrink:0}
+    .tl-step.done   .tl-node{background:var(--gdim);border:1.5px solid var(--gold);color:var(--gold);font-weight:700}
+    .tl-step.active .tl-node{background:var(--gold);border:2px solid var(--gold2);color:#070d1a;box-shadow:0 0 0 5px rgba(201,146,42,.15);font-weight:800;font-size:9px}
+    .tl-step.future .tl-node{background:var(--s2);border:1.5px solid var(--bd2);color:var(--tx3)}
+    .tl-body{padding-bottom:26px;padding-top:3px}
+    .tl-name{font-size:14px;font-weight:600;margin-bottom:4px;line-height:1.3}
+    .tl-step.done   .tl-name{color:var(--tx)}
+    .tl-step.active .tl-name{color:var(--gold2)}
+    .tl-step.future .tl-name{color:var(--tx3)}
+    .tl-detail{font-size:13px;line-height:1.65}
+    .tl-step.done   .tl-detail{color:var(--tx2)}
+    .tl-step.active .tl-detail{color:var(--tx2)}
+    .tl-step.future .tl-detail{color:var(--tx3)}
+
+    /* ═══════════ SERVICES ═══════════ */
+    .svc-block{border-radius:var(--rl);overflow:hidden;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.18);transition:box-shadow .3s,transform .3s;background:var(--s1);border:1px solid var(--bd)}
+    .svc-block:hover{box-shadow:0 12px 44px rgba(0,0,0,.32);transform:translateY(-2px);border-color:rgba(201,146,42,.2)}
+    .sb-head{padding:32px;border-bottom:1px solid var(--bd);display:flex;align-items:flex-start;gap:22px}
+    .sb-ico{width:54px;height:54px;border-radius:13px;flex-shrink:0;background:var(--gdim);border:1px solid rgba(201,146,42,.18);display:flex;align-items:center;justify-content:center;font-size:25px}
+    .sb-tag{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+    .sb-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--tx);margin-bottom:9px}
+    .sb-desc{font-size:13.5px;color:var(--tx2);line-height:1.7;max-width:520px}
+    .sb-feats{padding:24px 32px;background:var(--s2);display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:14px}
+    .feat{display:flex;align-items:flex-start;gap:11px}
+    .feat-chk{width:19px;height:19px;border-radius:50%;flex-shrink:0;margin-top:2px;background:var(--gdim);border:1px solid rgba(201,146,42,.3);display:flex;align-items:center;justify-content:center;font-size:9.5px;color:var(--gold)}
+    .feat-txt{font-size:13px;color:var(--tx2);line-height:1.55}
+    .feat-txt b{color:var(--tx);font-weight:600;display:block;margin-bottom:2px;font-size:13px}
+
+    /* ═══════════ CONTACT ═══════════ */
+    .ch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;margin-bottom:44px}
+    .ch-card{padding:32px 28px;display:flex;flex-direction:column;gap:14px;text-decoration:none}
+    .ch-card.em:hover{border-color:rgba(201,146,42,.4)!important}
+    .ch-card.wa:hover{border-color:rgba(37,211,102,.35)!important}
+    .ch-ico{width:56px;height:56px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:27px}
+    .ch-card.em .ch-ico{background:rgba(201,146,42,.1)}
+    .ch-card.wa .ch-ico{background:var(--gdim2)}
+    .ch-type{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--tx3)}
+    .ch-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700}
+    .ch-card.em .ch-val{color:var(--gold2)}
+    .ch-card.wa .ch-val{color:var(--wa)}
+    .ch-desc{font-size:13px;color:var(--tx2);line-height:1.65}
+    .ch-cta{font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:auto;padding-top:6px}
+    .ch-card.em .ch-cta{color:var(--gold)}
+    .ch-card.wa .ch-cta{color:var(--wa)}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:12px;margin-bottom:44px}
+    .info-card{padding:20px 22px}
+    .info-ico{font-size:19px;margin-bottom:11px}
+    .info-title{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:5px}
+    .info-val{font-size:12.5px;color:var(--tx2);line-height:1.6}
+    .info-val mark{background:none;color:var(--gold2);font-weight:600}
+
+    /* ══════════ SPACING HELPERS ══════════ */
+    .mt80{margin-top:80px}
+    .mt48{margin-top:48px}
+    .pt72{padding-top:72px}
+    .pb80{padding-bottom:80px}
+
+    /* ═══════════════════════════════════
+       ADMIN STYLES
+    ═══════════════════════════════════ */
+
+    /* ADMIN LOGIN OVERLAY */
+    #adminLoginOverlay{display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;background:rgba(7,13,26,.97);backdrop-filter:blur(16px);padding:20px}
+    #adminLoginOverlay.on{display:flex}
+    .lock-box{width:100%;max-width:400px;background:var(--s1);border:1px solid rgba(255,255,255,.13);border-radius:20px;padding:48px 40px;text-align:center}
+    .lock-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:18px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 20px rgba(201,146,42,.3)}
+    .lock-title{font-size:22px;font-weight:700;color:var(--tx);margin-bottom:6px}
+    .lock-sub{font-size:13px;color:var(--tx2);margin-bottom:32px}
+    .lock-input{width:100%;background:var(--s2);border:1px solid rgba(255,255,255,.13);border-radius:12px;padding:14px 18px;font-family:'Inter',monospace;font-size:16px;font-weight:600;color:var(--tx);letter-spacing:3px;text-align:center;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:14px}
+    .lock-input:focus{border-color:rgba(201,146,42,.5);box-shadow:0 0 0 3px rgba(201,146,42,.08)}
+    .lock-input.err{border-color:rgba(240,74,74,.5);animation:shake .3s ease}
+    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+    .lock-err{font-size:12px;color:var(--red);margin-bottom:14px;min-height:18px}
+    .btn-lock{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:#070d1a;cursor:pointer;transition:filter .2s,transform .2s}
+    .btn-lock:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .lock-cancel{margin-top:14px;font-size:12px;color:var(--tx3);cursor:pointer;background:none;border:none;font-family:inherit;transition:color .2s}
+    .lock-cancel:hover{color:var(--tx2)}
+
+    /* ADMIN PANEL PAGE */
+    #page-admin{z-index:10}
+    .adm-header{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(7,13,26,.97);border-bottom:1px solid rgba(201,146,42,.12);box-shadow:0 2px 24px rgba(0,0,0,.4)}
+    .adm-logo{display:flex;align-items:center;gap:10px}
+    .adm-logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+    .adm-logo-text{font-size:13px;font-weight:700;color:var(--tx)}
+    .adm-logo-badge{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);background:var(--reddim);border:1px solid rgba(240,74,74,.25);border-radius:100px;padding:2px 8px;margin-left:6px}
+    .adm-logout{font-size:12px;color:var(--tx3);cursor:pointer;padding:7px 14px;border-radius:8px;border:1px solid var(--bd);background:none;font-family:inherit;transition:color .2s,border-color .2s}
+    .adm-logout:hover{color:var(--red);border-color:rgba(240,74,74,.3)}
+
+    .adm-tabs{display:flex;gap:4px;padding:20px 40px 0;border-bottom:1px solid var(--bd);background:var(--bg)}
+    .adm-tab{font-size:13px;font-weight:500;color:var(--tx2);padding:10px 20px;border-radius:10px 10px 0 0;cursor:pointer;border:none;background:none;font-family:inherit;border-bottom:2px solid transparent;transition:color .2s,background .2s,border-color .2s}
+    .adm-tab:hover{color:var(--tx);background:rgba(255,255,255,.03)}
+    .adm-tab.on{color:var(--gold2);border-bottom-color:var(--gold2);background:rgba(201,146,42,.06)}
+
+    .adm-panel{display:none;max-width:1100px;margin:0 auto;padding:36px 40px 80px}
+    .adm-panel.on{display:block}
+
+    .sec-hd{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+    .sec-title{font-size:18px;font-weight:700;color:var(--tx)}
+    .sec-sub{font-size:13px;color:var(--tx2);margin-top:2px}
+
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+    .field label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--tx3)}
+    .field input,.field select,.field textarea{background:var(--s2);border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--tx);outline:none;transition:border-color .2s,box-shadow .2s;width:100%}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(201,146,42,.5);box-shadow:0 0 0 3px rgba(201,146,42,.07)}
+    .field select option{background:var(--s2)}
+    .field textarea{resize:vertical;min-height:80px;line-height:1.5}
+    .field input.mono{font-family:'Inter',monospace;letter-spacing:2px;font-weight:600;text-transform:uppercase}
+
+    .stage-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.5px;padding:4px 10px;border-radius:100px;white-space:nowrap}
+    .stage-0{background:rgba(78,101,133,.15);color:#6e8ab0;border:1px solid rgba(78,101,133,.25)}
+    .stage-1{background:rgba(201,146,42,.1);color:#c9922a;border:1px solid rgba(201,146,42,.25)}
+    .stage-2{background:rgba(255,160,50,.1);color:#ffa032;border:1px solid rgba(255,160,50,.25)}
+    .stage-3{background:rgba(255,120,50,.1);color:#ff7832;border:1px solid rgba(255,120,50,.25)}
+    .stage-4{background:rgba(180,100,255,.1);color:#b464ff;border:1px solid rgba(180,100,255,.25)}
+    .stage-5{background:rgba(50,180,255,.1);color:#32b4ff;border:1px solid rgba(50,180,255,.25)}
+    .stage-6{background:rgba(50,220,180,.1);color:#32dcb4;border:1px solid rgba(50,220,180,.25)}
+    .stage-7{background:rgba(34,200,122,.1);color:#22c87a;border:1px solid rgba(34,200,122,.25)}
+
+    .tbl-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+    .tbl-search{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;gap:10px;flex-wrap:wrap}
+    .tbl-search input{flex:1;min-width:160px;background:var(--s2);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--tx);outline:none}
+    .tbl-search input:focus{border-color:rgba(201,146,42,.4)}
+    .tbl-search select{background:var(--s2);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--tx);outline:none;cursor:pointer}
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:11px 16px;text-align:left;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);border-bottom:1px solid var(--bd);background:var(--s2)}
+    tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:rgba(255,255,255,.02)}
+    td{padding:12px 16px;font-size:13px;color:var(--tx);vertical-align:middle}
+    td.code{font-family:'Inter',monospace;font-weight:600;letter-spacing:1.5px;font-size:12.5px;color:var(--gold2)}
+    td.cargo{color:var(--tx2);max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    td.actions{text-align:right;white-space:nowrap;display:flex;gap:6px;justify-content:flex-end;align-items:center}
+    .empty-row td{text-align:center;padding:40px;color:var(--tx3);font-size:13px}
+
+    .modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(7,13,26,.85);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px}
+    .modal-bg.on{display:flex}
+    .modal{background:var(--s1);border:1px solid rgba(255,255,255,.13);border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:32px}
+    .modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .modal-title{font-size:16px;font-weight:700;color:var(--tx)}
+    .modal-close{width:30px;height:30px;border-radius:8px;background:var(--s2);border:1px solid var(--bd);color:var(--tx2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;font-family:inherit;transition:color .2s}
+    .modal-close:hover{color:var(--tx)}
+    .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;flex-wrap:wrap}
+
+    .stage-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:4px}
+    .stage-opt{padding:10px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--s2);cursor:pointer;transition:all .2s;text-align:left;font-family:inherit}
+    .stage-opt:hover{border-color:rgba(255,255,255,.13);background:var(--s3)}
+    .stage-opt.sel{border-color:var(--gold);background:var(--gdim)}
+    .stage-opt-num{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);margin-bottom:3px}
+    .stage-opt-name{font-size:12.5px;font-weight:600;color:var(--tx)}
+
+    .contact-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .contact-preview{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-top:20px}
+    .cp-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:12px}
+    .cp-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .cp-row:last-child{margin-bottom:0}
+    .cp-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .cp-ico.em{background:rgba(201,146,42,.1)}
+    .cp-ico.wa{background:rgba(37,211,102,.1)}
+    .cp-val{font-size:13px;font-weight:600}
+    .cp-val.em{color:var(--gold2)}
+    .cp-val.wa{color:var(--wa)}
+
+    .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .setting-card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:22px}
+    .setting-card-title{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:4px}
+    .setting-card-sub{font-size:12px;color:var(--tx2);margin-bottom:16px;line-height:1.5}
+
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+    .stat-box{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:18px 20px}
+    .stat-box-num{font-size:28px;font-weight:700;color:var(--gold2);line-height:1;margin-bottom:5px}
+    .stat-box-lbl{font-size:10.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx3)}
+
+    #confirmModal .modal{max-width:380px;text-align:center}
+    .confirm-icon{font-size:36px;margin-bottom:12px}
+    .confirm-title{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:6px}
+    .confirm-sub{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:24px}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:28px;right:28px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+    .toast-item{background:var(--s1);border:1px solid rgba(255,255,255,.13);border-radius:12px;padding:13px 18px;font-size:13px;font-weight:500;color:var(--tx);box-shadow:0 8px 32px rgba(0,0,0,.4);display:flex;align-items:center;gap:10px;animation:toastIn .3s ease both;max-width:320px}
+    .toast-item.success{border-color:rgba(34,200,122,.3);background:rgba(34,200,122,.07)}
+    .toast-item.error{border-color:rgba(240,74,74,.3);background:rgba(240,74,74,.07)}
+    @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ═══════════ RESPONSIVE — TABLET ≤900 ═══════════ */
+    @media(max-width:900px){
+      header{padding:0 28px}
+      .hero-wrap{padding:76px 28px 56px}
+      .stats-bar,.wrap,.contact-row{padding-left:28px;padding-right:28px}
+    }
+    @media(max-width:760px){
+      .adm-header{padding:0 16px}
+      .adm-tabs{padding:16px 16px 0;overflow-x:auto;gap:2px}
+      .adm-tab{white-space:nowrap;padding:9px 14px;font-size:12px}
+      .adm-panel{padding:24px 16px 60px}
+      .stats-row{grid-template-columns:1fr 1fr;gap:10px}
+      .settings-grid{grid-template-columns:1fr}
+      .contact-edit-grid{grid-template-columns:1fr}
+      .stage-grid{grid-template-columns:1fr}
+      table{font-size:12px}
+      td,th{padding:10px 10px}
+      td.cargo{max-width:120px}
+      .tbl-search{flex-direction:column}
+      .modal{padding:24px 20px}
+    }
+    @media(max-width:640px){
+      header{padding:0 16px;height:58px}
+      .logo-sub{display:none}
+      .logo-name{font-size:13px}
+      nav a{padding:6px 9px;font-size:12px;letter-spacing:0}
+      .hero-wrap{padding:48px 16px 40px;text-align:center}
+      .hero-wrap .display{font-size:clamp(34px,9vw,50px)}
+      .hero-wrap .lead{max-width:100%;font-size:14.5px}
+      .hero-actions{flex-direction:column;align-items:stretch}
+      .hero-badge{display:none}
+      .stats-bar{padding:0 16px;margin-bottom:52px}
+      .stats-inner{grid-template-columns:repeat(2,1fr)}
+      .s-cell{padding:20px 14px}
+      .s-cell:nth-child(2){border-right:none}
+      .s-cell:nth-child(3){border-top:1px solid var(--bd)}
+      .s-cell:nth-child(4){border-top:1px solid var(--bd);border-right:none}
+      .s-num{font-size:28px}
+      .wrap{padding:0 16px}
+      .mt80{margin-top:52px}
+      .pt72{padding-top:48px}
+      .pb80{padding-bottom:56px}
+      .svc-grid{grid-template-columns:1fr 1fr;gap:10px}
+      .svc-card{padding:18px 14px}
+      .svc-ico{width:38px;height:38px;font-size:17px;margin-bottom:12px}
+      .svc-name{font-size:12.5px}
+      .svc-desc{font-size:11.5px}
+      .why-grid{grid-template-columns:1fr 1fr;gap:10px}
+      .why-card{padding:18px 14px}
+      .cta-band{flex-direction:column;padding:26px 20px;gap:18px}
+      .cta-band h2{font-size:22px}
+      .cta-band .btn{width:100%}
+      .testi-grid{grid-template-columns:1fr}
+      .contact-row{padding:0 16px 52px;margin-top:48px}
+      .cr-pills{flex-direction:column}
+      .search-bar{flex-direction:column;border-radius:12px}
+      .search-bar input{padding:16px 18px;font-size:14px;letter-spacing:1.5px;border-bottom:1px solid var(--bd)}
+      .search-bar button{padding:14px 18px;font-size:13px;width:100%;border-radius:0}
+      .rc-top{padding:18px 16px;flex-direction:column;gap:12px}
+      .rc-top > div:first-child{flex:1;min-width:0}
+      .s-pill{align-self:flex-start}
+      .rc-name{font-size:15px}
+      .rc-route{padding:14px 16px}
+      .rc-city-name{font-size:13px}
+      .rc-city-sub{font-size:10px}
+      .rc-ship{font-size:16px;margin:0 5px}
+      .rc-prog{padding:16px 16px 0}
+      .rc-meta{grid-template-columns:1fr 1fr}
+      .rc-mi{padding:12px 14px}
+      .rc-mi:nth-child(2){border-right:none}
+      .rc-mi:nth-child(3){grid-column:1/-1;border-top:1px solid var(--bd);border-right:none}
+      .rc-tl{padding:22px 16px 4px}
+      .tl-step{grid-template-columns:26px 1fr;gap:0 14px}
+      .tl-node{width:26px;height:26px;font-size:10px}
+      .tl-step:not(:last-child) .tl-line{left:12px;top:28px}
+      .tl-name{font-size:13px}
+      .tl-detail{font-size:12px}
+      .tl-body{padding-bottom:20px}
+      .sb-head{flex-direction:column;gap:14px;padding:20px 16px}
+      .sb-feats{padding:16px;grid-template-columns:1fr;gap:10px}
+      .ch-grid{grid-template-columns:1fr}
+      .ch-card{padding:24px 20px}
+      .info-grid{grid-template-columns:1fr 1fr;gap:10px}
+      .info-card{padding:14px}
+      footer{padding:20px 16px;font-size:11px}
+    }
+    @media(max-width:380px){
+      nav a{padding:5px 7px;font-size:11.5px}
+      .svc-grid,.why-grid,.info-grid{grid-template-columns:1fr}
+      .s-num{font-size:24px}
+      .adm-tab span{display:none}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-noise"></div>
+<div class="bg-g1"></div>
+<div class="bg-g2"></div>
+
+<!-- ══════════════════════════════════
+     ADMIN LOGIN OVERLAY
+     (shown over the tracking page when secret code is entered)
+══════════════════════════════════ -->
+<div id="adminLoginOverlay">
+  <div class="lock-box">
+    <div class="lock-icon">🔐</div>
+    <div class="lock-title">Admin Access</div>
+    <div class="lock-sub">Enter your admin password to continue</div>
+    <input class="lock-input" id="lockInput" type="password" placeholder="••••••••" maxlength="30" autocomplete="off"/>
+    <div class="lock-err" id="lockErr"></div>
+    <button class="btn-lock" onclick="tryUnlock()">Unlock Panel →</button>
+    <button class="lock-cancel" onclick="cancelAdminLogin()">← Back to Tracking</button>
+  </div>
+</div>
+
+<!-- HEADER (hidden when admin panel is open) -->
+<header id="siteHeader">
+  <div class="logo" onclick="navigate('home')">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#070d1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 20h20M2 14h20M5 14V8l3-4h8l3 4v6" fill="#070d1a" stroke="none"/>
+        <path d="M2 20h20M2 14h20M5 14V8l3-4h8l3 4v6" stroke="#070d1a"/>
+        <circle cx="7" cy="20" r="1.5" fill="#c9922a" stroke="none"/>
+        <circle cx="17" cy="20" r="1.5" fill="#c9922a" stroke="none"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-name">Swift Ship Logistics</div>
+      <div class="logo-sub">Global Freight</div>
+    </div>
+  </div>
+  <nav>
+    <a id="nav-home"     onclick="navigate('home')">Home</a>
+    <a id="nav-track"    onclick="navigate('track')">Track</a>
+    <a id="nav-services" onclick="navigate('services')">Services</a>
+    <a id="nav-contact"  onclick="navigate('contact')">Contact</a>
+  </nav>
+</header>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="page-home" class="page">
+  <div class="hero-wrap">
+    <div class="hero-badge"><div class="hero-badge-dot"></div>Global Freight · Delivered</div>
+    <div class="display">Moving Cargo<br/><em>Across Every Ocean</em></div>
+    <p class="lead">Swift Ship Logistics connects businesses to global markets with reliable ocean, air, and ground freight — tracked in real time, every mile of the way.</p>
+    <div class="hero-actions">
+      <button class="btn btn-gold" onclick="navigate('track')">Track a Shipment →</button>
+      <button class="btn btn-outline" onclick="navigate('services')">Our Services</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="s-cell"><div class="s-num">120+</div><div class="s-lbl">Countries Served</div></div>
+      <div class="s-cell"><div class="s-num">50K+</div><div class="s-lbl">Shipments Delivered</div></div>
+      <div class="s-cell"><div class="s-num">98.7%</div><div class="s-lbl">On-Time Rate</div></div>
+      <div class="s-cell"><div class="s-num">24/7</div><div class="s-lbl">Live Support</div></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="eyebrow">What We Offer</div>
+    <div class="display" style="font-size:clamp(30px,3.8vw,44px);margin-bottom:28px;">Freight Solutions<br/>Built For You</div>
+    <div class="svc-grid">
+      <div class="card svc-card" onclick="navigate('services')"><div class="svc-ico">✈️</div><div class="svc-name">Express Air Freight</div><div class="svc-desc">Time-critical shipments fast via our global airline network with priority handling.</div></div>
+      <div class="card svc-card" onclick="navigate('services')"><div class="svc-ico">🚢</div><div class="svc-name">Ocean Freight</div><div class="svc-desc">FCL and LCL loads with precision across all major international trade lanes.</div></div>
+      <div class="card svc-card" onclick="navigate('services')"><div class="svc-ico">📦</div><div class="svc-name">Air Cargo</div><div class="svc-desc">Reliable air cargo for bulk commercial shipments requiring fast intercontinental transit.</div></div>
+      <div class="card svc-card" onclick="navigate('services')"><div class="svc-ico">🛃</div><div class="svc-name">Customs Clearance</div><div class="svc-desc">Expert brokerage ensuring smooth border crossings and full regulatory compliance.</div></div>
+    </div>
+  </div>
+
+  <div class="wrap mt80">
+    <div class="eyebrow">Why Swift Ship</div>
+    <div class="display" style="font-size:clamp(30px,3.8vw,44px);margin-bottom:28px;">The Advantage<br/><em>You Deserve</em></div>
+    <div class="why-grid">
+      <div class="card why-card"><div class="why-ico">📡</div><div class="why-title">Real-Time Tracking</div><div class="why-desc">Live updates at every milestone. Know exactly where your cargo is, always.</div></div>
+      <div class="card why-card"><div class="why-ico">🔐</div><div class="why-title">Secure Handling</div><div class="why-desc">Every shipment is insured and handled by trained logistics professionals.</div></div>
+      <div class="card why-card"><div class="why-ico">🌐</div><div class="why-title">Global Network</div><div class="why-desc">Partnerships with top carriers across 120+ countries and all major ports.</div></div>
+      <div class="card why-card"><div class="why-ico">💬</div><div class="why-title">Dedicated Support</div><div class="why-desc">Reach our team anytime via email or WhatsApp — a real person, never a bot.</div></div>
+    </div>
+  </div>
+
+  <div class="wrap mt80">
+    <div class="cta-band">
+      <div><div class="cta-ey">Shipment Tracking</div><h2>Know Exactly Where<br/>Your Cargo Is</h2><p>Enter your tracking code for instant real-time updates.</p></div>
+      <button class="btn btn-gold" onclick="navigate('track')">Track Now →</button>
+    </div>
+  </div>
+
+  <div class="wrap mt80">
+    <div class="eyebrow">Client Stories</div>
+    <div class="display" style="font-size:clamp(30px,3.8vw,44px);margin-bottom:28px;">Trusted Worldwide</div>
+    <div class="testi-grid">
+      <div class="card t-card"><div class="t-stars">★★★★★</div><p class="t-quote">Our ocean freight from Dubai cleared US customs ahead of schedule. Swift Ship's team kept us informed every step — truly outstanding service.</p><div class="t-author"><div class="t-avatar">JM</div><div><div class="t-name">James M.</div><div class="t-role">Import Manager, RetailCo USA</div></div></div></div>
+      <div class="card t-card"><div class="t-stars">★★★★★</div><p class="t-quote">The express air shipment arrived a full day early. The tracking portal is clean, WhatsApp support is instant. We won't use anyone else.</p><div class="t-author"><div class="t-avatar">SP</div><div><div class="t-name">Sofia P.</div><div class="t-role">Operations Director, TechParts EU</div></div></div></div>
+      <div class="card t-card"><div class="t-stars">★★★★★</div><p class="t-quote">Handled our industrial crate from Sydney to Singapore without a scratch. Customs paperwork was seamless. Swift Ship handles all our freight now.</p><div class="t-author"><div class="t-avatar">AK</div><div><div class="t-name">Alex K.</div><div class="t-role">Supply Chain Lead, MineCore AU</div></div></div></div>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="cr-label">Need Assistance</div>
+    <div class="cr-pills" id="homeContactPills">
+      <a class="cr-pill em" id="homeEmailPill" href="mailto:Swiftshiplog1@gmail.com"><div class="cr-ico">✉️</div><div><div class="cr-lbl">Email</div><div class="cr-val" id="homeEmailVal">Swiftshiplog1@gmail.com</div></div><div class="cr-arr">→</div></a>
+      <a class="cr-pill wa" id="homeWaPill" href="https://wa.me/12135466916" target="_blank" rel="noopener"><div class="cr-ico">💬</div><div><div class="cr-lbl">WhatsApp</div><div class="cr-val" id="homeWaVal">+1 (213) 546-6916</div></div><div class="cr-arr">→</div></a>
+    </div>
+  </div>
+  <footer>© 2026 Swift Ship Logistics. All rights reserved.</footer>
+</div>
+
+<!-- ══════════ TRACK ══════════ -->
+<div id="page-track" class="page">
+  <div class="wrap pt72 pb80">
+    <div class="eyebrow">Shipment Tracking</div>
+    <div class="display">Track Your<br/><em>Shipment</em></div>
+    <p class="lead" style="margin-bottom:36px;">Enter your tracking code to get a full real-time status update on your cargo's journey.</p>
+
+    <div class="search-bar">
+      <input type="text" id="trackingInput" placeholder="Enter tracking code (e.g. BX7TQ29NKA)" maxlength="20" autocomplete="off" autocapitalize="characters"/>
+      <button onclick="trackPackage()">Track →</button>
+    </div>
+    <div class="s-hint">🔒 All shipment data is encrypted and secure.</div>
+
+    <div class="err-box" id="errorMsg">⚠️&nbsp; No shipment found for that code. Please double-check and try again.</div>
+
+    <div class="res-card" id="resultCard">
+      <div class="rc-top">
+        <div>
+          <div class="rc-code" id="displayCode"></div>
+          <div class="rc-name" id="packageName"></div>
+        </div>
+        <div class="s-pill" id="statusBadge"><div class="sp-dot"></div><span id="statusLabel"></span></div>
+      </div>
+      <div class="rc-route">
+        <div class="rc-city">
+          <div class="rc-city-lbl">Origin</div>
+          <div class="rc-city-name" id="routeOriginCity">—</div>
+          <div class="rc-city-sub" id="routeOriginSub"></div>
+        </div>
+        <div class="rc-line">
+          <div class="rc-dot"></div>
+          <div class="rc-dash"></div>
+          <div class="rc-ship" id="routeIcon">🚢</div>
+          <div class="rc-dash2"></div>
+          <div class="rc-dot2"></div>
+        </div>
+        <div class="rc-city" style="text-align:right">
+          <div class="rc-city-lbl">Destination</div>
+          <div class="rc-city-name" id="routeDestCity">—</div>
+          <div class="rc-city-sub" id="routeDestSub"></div>
+        </div>
+      </div>
+      <div class="rc-prog">
+        <div class="rc-prog-hd">
+          <span class="rc-prog-lbl">Journey Progress</span>
+          <span class="rc-prog-pct" id="progPct"></span>
+        </div>
+        <div class="rc-prog-track"><div class="rc-prog-fill" id="progFill"></div></div>
+      </div>
+      <div class="rc-meta">
+        <div class="rc-mi"><div class="rc-ml">Service</div><div class="rc-mv" id="metaService">–</div></div>
+        <div class="rc-mi"><div class="rc-ml">Cargo</div><div class="rc-mv" id="metaCargo">–</div></div>
+        <div class="rc-mi"><div class="rc-ml">Est. Delivery</div><div class="rc-mv hi" id="metaEta">–</div></div>
+      </div>
+      <div class="rc-tl">
+        <div class="tl-hd">Shipment Journey</div>
+        <div id="stepsContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="cr-label">Need Assistance</div>
+    <div class="cr-pills">
+      <a class="cr-pill em" id="trackEmailPill" href="mailto:Swiftshiplog1@gmail.com"><div class="cr-ico">✉️</div><div><div class="cr-lbl">Email</div><div class="cr-val" id="trackEmailVal">Swiftshiplog1@gmail.com</div></div><div class="cr-arr">→</div></a>
+      <a class="cr-pill wa" id="trackWaPill" href="https://wa.me/12135466916" target="_blank" rel="noopener"><div class="cr-ico">💬</div><div><div class="cr-lbl">WhatsApp</div><div class="cr-val" id="trackWaVal">+1 (213) 546-6916</div></div><div class="cr-arr">→</div></a>
+    </div>
+  </div>
+  <footer>© 2026 Swift Ship Logistics. All rights reserved.</footer>
+</div>
+
+<!-- ══════════ SERVICES ══════════ -->
+<div id="page-services" class="page">
+  <div class="wrap pt72 pb80">
+    <div class="eyebrow">What We Offer</div>
+    <div class="display" style="margin-bottom:44px;">Our <em>Services</em></div>
+
+    <div class="svc-block">
+      <div class="sb-head"><div class="sb-ico">✈️</div><div><div class="sb-tag">Speed · Priority</div><div class="sb-title">Express Air Freight</div><p class="sb-desc">When time is the priority, our express air freight service delivers. We partner with major airlines worldwide to offer next-flight-out and time-definite delivery for urgent commercial and personal shipments.</p></div></div>
+      <div class="sb-feats">
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Next-Flight-Out</b>Same-day dispatch on qualifying urgent shipments.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Time-Definite</b>Guaranteed delivery windows you can plan around.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Global Airlines</b>Access to 300+ airline partners across all continents.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>White Glove</b>Premium handling and end-to-end care for fragile cargo.</div></div>
+      </div>
+    </div>
+
+    <div class="svc-block">
+      <div class="sb-head"><div class="sb-ico">🚀</div><div><div class="sb-tag">Speed · Global</div><div class="sb-title">International Express</div><p class="sb-desc">Door-to-door international express delivery for commercial documents and small packages. Our network of courier partners ensures rapid cross-border delivery with full customs brokerage included.</p></div></div>
+      <div class="sb-feats">
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Door-to-Door</b>Pickup and final-mile delivery fully included.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Customs Included</b>All import/export documentation handled seamlessly.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Priority Boarding</b>First-on, first-off handling at every hub.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>150+ Airline Partners</b>Global coverage on major carriers worldwide.</div></div>
+      </div>
+    </div>
+
+    <div class="svc-block">
+      <div class="sb-head"><div class="sb-ico">🚢</div><div><div class="sb-tag">Volume · Economy</div><div class="sb-title">Ocean Freight</div><p class="sb-desc">The most cost-effective solution for large commercial shipments. We handle Full Container Loads (FCL) and Less-than-Container Loads (LCL) across all major international trade lanes including Asia, Europe, the Americas, and the Middle East.</p></div></div>
+      <div class="sb-feats">
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>FCL &amp; LCL</b>Flexible container options for any cargo volume.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Major Trade Lanes</b>Coverage across all key global shipping routes.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Port-to-Port or Door</b>Flexible delivery scopes to fit your needs.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Cargo Insurance</b>Full insurance options for complete peace of mind.</div></div>
+      </div>
+    </div>
+
+    <div class="svc-block">
+      <div class="sb-head"><div class="sb-ico">📦</div><div><div class="sb-tag">Bulk · Intercontinental</div><div class="sb-title">Air Cargo</div><p class="sb-desc">For larger commercial shipments that still require air speed, our air cargo service offers reliable scheduled flights for heavy and oversized freight across intercontinental routes.</p></div></div>
+      <div class="sb-feats">
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Heavy &amp; Oversized</b>Specialized handling for large cargo types.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Scheduled Flights</b>Consistent, reliable departure times guaranteed.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Temperature Control</b>Cold-chain options for sensitive goods.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Secure Facilities</b>Bonded warehouse storage at key global hubs.</div></div>
+      </div>
+    </div>
+
+    <div class="svc-block">
+      <div class="sb-head"><div class="sb-ico">🛃</div><div><div class="sb-tag">Compliance · Brokerage</div><div class="sb-title">Customs Clearance</div><p class="sb-desc">Navigating international customs can be complex. Our licensed brokers manage all documentation, duties, and compliance requirements so your shipment clears borders without delay or complication.</p></div></div>
+      <div class="sb-feats">
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Licensed Brokers</b>Certified professionals in key import/export markets.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Full Documentation</b>HS codes, invoices, and permits handled for you.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Duties Management</b>Accurate duty calculation and payment processing.</div></div>
+        <div class="feat"><div class="feat-chk">✓</div><div class="feat-txt"><b>Regulatory Compliance</b>Always up-to-date with international trade law.</div></div>
+      </div>
+    </div>
+
+    <div class="cta-band mt48">
+      <div><div class="cta-ey">Get Started</div><h2>Ready to Ship With Us?</h2><p>Contact our team or track an existing shipment right now.</p></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-gold" onclick="navigate('contact')">Contact Us →</button>
+        <button class="btn btn-ghost" onclick="navigate('track')">Track Shipment</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="cr-label">Need Assistance</div>
+    <div class="cr-pills">
+      <a class="cr-pill em" id="svcEmailPill" href="mailto:Swiftshiplog1@gmail.com"><div class="cr-ico">✉️</div><div><div class="cr-lbl">Email</div><div class="cr-val" id="svcEmailVal">Swiftshiplog1@gmail.com</div></div><div class="cr-arr">→</div></a>
+      <a class="cr-pill wa" id="svcWaPill" href="https://wa.me/12135466916" target="_blank" rel="noopener"><div class="cr-ico">💬</div><div><div class="cr-lbl">WhatsApp</div><div class="cr-val" id="svcWaVal">+1 (213) 546-6916</div></div><div class="cr-arr">→</div></a>
+    </div>
+  </div>
+  <footer>© 2026 Swift Ship Logistics. All rights reserved.</footer>
+</div>
+
+<!-- ══════════ CONTACT ══════════ -->
+<div id="page-contact" class="page">
+  <div class="wrap pt72 pb80">
+    <div class="eyebrow">Get In Touch</div>
+    <div class="display" style="margin-bottom:14px;">We're Here<br/><em>To Help</em></div>
+    <p class="lead" style="margin-bottom:44px;">Have a question about a shipment, need a quote, or want to learn more? Our team responds fast — always a real person.</p>
+
+    <div class="ch-grid">
+      <a class="card ch-card em" id="contactEmailCard" href="mailto:Swiftshiplog1@gmail.com">
+        <div class="ch-ico">✉️</div>
+        <div><div class="ch-type">Email</div><div class="ch-val" id="contactEmailVal">Swiftshiplog1@gmail.com</div></div>
+        <p class="ch-desc">Send us an email for quotes, documentation, customs inquiries, or any general question. We typically respond within a few hours.</p>
+        <div class="ch-cta">Send Email →</div>
+      </a>
+      <a class="card ch-card wa" id="contactWaCard" href="https://wa.me/12135466916" target="_blank" rel="noopener">
+        <div class="ch-ico">💬</div>
+        <div><div class="ch-type">WhatsApp</div><div class="ch-val" id="contactWaVal">+1 (213) 546-6916</div></div>
+        <p class="ch-desc">Prefer a quick message? Chat directly on WhatsApp for fast support, tracking help, or urgent shipment updates.</p>
+        <div class="ch-cta">Message Us →</div>
+      </a>
+    </div>
+
+    <div class="info-grid">
+      <div class="card info-card"><div class="info-ico">🕐</div><div class="info-title">Response Time</div><div class="info-val">Email within <mark>2–4 hours</mark>. WhatsApp typically faster.</div></div>
+      <div class="card info-card"><div class="info-ico">🌍</div><div class="info-title">Languages</div><div class="info-val">Support in <mark>English</mark> and <mark>Arabic</mark>.</div></div>
+      <div class="card info-card"><div class="info-ico">📋</div><div class="info-title">Quote Requests</div><div class="info-val">Include cargo type, weight, and origin/destination for fastest response.</div></div>
+      <div class="card info-card"><div class="info-ico">🔍</div><div class="info-title">Tracking Support</div><div class="info-val">Have your <mark>tracking code</mark> ready when reaching out about a shipment.</div></div>
+    </div>
+
+    <div class="cta-band">
+      <div><div class="cta-ey">Already Shipped?</div><h2>Track Your Shipment Now</h2><p>Use your tracking code to get live status updates.</p></div>
+      <button class="btn btn-gold" onclick="navigate('track')">Track Now →</button>
+    </div>
+  </div>
+  <footer>© 2026 Swift Ship Logistics. All rights reserved.</footer>
+</div>
+
+<!-- ══════════════════════════════════
+     ADMIN PANEL PAGE
+══════════════════════════════════ -->
+<div id="page-admin" class="page">
+  <!-- Admin Header -->
+  <div class="adm-header">
+    <div class="adm-logo">
+      <div class="adm-logo-mark">🚢</div>
+      <div class="adm-logo-text">Swift Ship Logistics</div>
+      <div class="adm-logo-badge">ADMIN</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="adm-logout" onclick="navigate('home')" style="color:var(--tx2)">← Back to Site</button>
+      <button class="adm-logout" onclick="adminLogout()">🔒 Lock</button>
+    </div>
+  </div>
+
+  <!-- Admin Tabs -->
+  <div class="adm-tabs">
+    <button class="adm-tab on" onclick="switchAdminTab('shipments')">📦 <span>Shipments</span></button>
+    <button class="adm-tab" onclick="switchAdminTab('contact')">📞 <span>Contact Info</span></button>
+    <button class="adm-tab" onclick="switchAdminTab('settings')">⚙️ <span>Settings</span></button>
+  </div>
+
+  <!-- ══ SHIPMENTS PANEL ══ -->
+  <div class="adm-panel on" id="panel-shipments">
+    <div class="stats-row" id="statsRow"></div>
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title">Tracking Codes</div>
+        <div class="sec-sub">Create, edit, move and delete tracking codes</div>
+      </div>
+      <button class="btn btn-gold" onclick="openCreate()">＋ New Code</button>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-search">
+        <input type="text" id="searchInput" placeholder="Search by code or cargo…" oninput="renderTable()"/>
+        <select id="filterStage" onchange="renderTable()">
+          <option value="">All Stages</option>
+          <option value="0">Stage 0 — Order Confirmed</option>
+          <option value="1">Stage 1 — Picked Up</option>
+          <option value="2">Stage 2 — Customs Export</option>
+          <option value="3">Stage 3 — Departed Origin</option>
+          <option value="4">Stage 4 — In Transit</option>
+          <option value="5">Stage 5 — Arrived NY</option>
+          <option value="6">Stage 6 — Out for Delivery</option>
+          <option value="7">Stage 7 — Delivered</option>
+        </select>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Cargo Description</th>
+              <th>Stage</th>
+              <th>Status</th>
+              <th style="text-align:right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tblBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONTACT PANEL ══ -->
+  <div class="adm-panel" id="panel-contact">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title">Contact Information</div>
+        <div class="sec-sub">Update the email and WhatsApp number shown to customers</div>
+      </div>
+    </div>
+    <div class="contact-edit-grid">
+      <div class="field"><label>Email Address</label><input type="email" id="ctEmail" placeholder="yourname@email.com"/></div>
+      <div class="field"><label>WhatsApp Number</label><input type="text" id="ctPhone" placeholder="+1 (213) 546-6916"/></div>
+      <div class="field"><label>Display Name (optional)</label><input type="text" id="ctName" placeholder="Swift Ship Logistics"/></div>
+      <div class="field"><label>WhatsApp Link Number (digits only)</label><input type="text" id="ctPhoneRaw" placeholder="12135466916"/></div>
+    </div>
+    <button class="btn btn-gold" onclick="saveContact()" style="margin-bottom:24px">Save Contact Info</button>
+    <div class="contact-preview">
+      <div class="cp-label">Live Preview</div>
+      <div class="cp-row"><div class="cp-ico em">✉️</div><div class="cp-val em" id="prevEmail">Swiftshiplog1@gmail.com</div></div>
+      <div class="cp-row"><div class="cp-ico wa">💬</div><div class="cp-val wa" id="prevPhone">+1 (213) 546-6916</div></div>
+    </div>
+  </div>
+
+  <!-- ══ SETTINGS PANEL ══ -->
+  <div class="adm-panel" id="panel-settings">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title">Settings</div>
+        <div class="sec-sub">Manage admin password and data</div>
+      </div>
+    </div>
+    <div class="settings-grid">
+      <div class="setting-card">
+        <div class="setting-card-title">Change Admin Password</div>
+        <div class="setting-card-sub">Update the password used to access this admin panel. Make sure to save it somewhere safe.</div>
+        <div class="field"><label>Current Password</label><input type="password" id="curPwd" placeholder="Current password"/></div>
+        <div class="field"><label>New Password</label><input type="password" id="newPwd" placeholder="New password (min 6 chars)"/></div>
+        <div class="field"><label>Confirm New Password</label><input type="password" id="cfmPwd" placeholder="Repeat new password"/></div>
+        <button class="btn btn-gold btn-sm" onclick="changePwd()">Update Password</button>
+      </div>
+      <div class="setting-card">
+        <div class="setting-card-title">Data Management</div>
+        <div class="setting-card-sub">Export all tracking codes as JSON, or reset everything back to the default dataset.</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn btn-outline btn-sm" onclick="exportData()">⬇ Export All Codes (JSON)</button>
+          <button class="btn btn-outline btn-sm" onclick="importClick()">⬆ Import Codes (JSON)</button>
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)"/>
+          <button class="btn btn-red btn-sm" onclick="confirmReset()">↩ Reset to Defaults</button>
+        </div>
+      </div>
+      <div class="setting-card">
+        <div class="setting-card-title">Bulk Stage Move</div>
+        <div class="setting-card-sub">Move all codes that are currently on a specific stage to another stage at once.</div>
+        <div class="field"><label>From Stage</label>
+          <select id="bulkFrom">
+            <option value="0">Stage 0 — Order Confirmed</option>
+            <option value="1">Stage 1 — Picked Up</option>
+            <option value="2">Stage 2 — Customs Export</option>
+            <option value="3">Stage 3 — Departed Origin</option>
+            <option value="4">Stage 4 — In Transit</option>
+            <option value="5">Stage 5 — Arrived NY</option>
+            <option value="6">Stage 6 — Out for Delivery</option>
+            <option value="7">Stage 7 — Delivered</option>
+          </select>
+        </div>
+        <div class="field"><label>To Stage</label>
+          <select id="bulkTo">
+            <option value="0">Stage 0 — Order Confirmed</option>
+            <option value="1">Stage 1 — Picked Up</option>
+            <option value="2">Stage 2 — Customs Export</option>
+            <option value="3">Stage 3 — Departed Origin</option>
+            <option value="4">Stage 4 — In Transit</option>
+            <option value="5">Stage 5 — Arrived NY</option>
+            <option value="6">Stage 6 — Out for Delivery</option>
+            <option value="7">Stage 7 — Delivered</option>
+          </select>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="bulkMove()">Move All</button>
+      </div>
+      <div class="setting-card">
+        <div class="setting-card-title">Quick Stats</div>
+        <div class="setting-card-sub">Overview of current data stored in this panel.</div>
+        <div id="quickStats" style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--tx2)"></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-admin -->
+
+<!-- CREATE/EDIT MODAL -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="modalTitle">New Tracking Code</div>
+      <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+    </div>
+    <input type="hidden" id="editingCode"/>
+    <div class="field"><label>Tracking Code</label><input class="mono" type="text" id="fCode" placeholder="e.g. AB1CD2EF3G" maxlength="20" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"/></div>
+    <div class="field"><label>Cargo Description</label><input type="text" id="fCargo" placeholder="e.g. Electronics Components · 4 pallets"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="field"><label>Origin City</label><input type="text" id="fOriginCity" placeholder="e.g. Dubai, UAE"/></div>
+      <div class="field"><label>Origin Port / Location</label><input type="text" id="fOriginSub" placeholder="e.g. Jebel Ali Port"/></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="field"><label>Destination City</label><input type="text" id="fDestCity" placeholder="e.g. New York, USA"/></div>
+      <div class="field"><label>Destination Port / Location</label><input type="text" id="fDestSub" placeholder="e.g. Port of NY &amp; NJ"/></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="field"><label>Estimated Delivery Date</label><input type="text" id="fEta" placeholder="e.g. Jul 15, 2026"/></div>
+      <div class="field"><label>Shipping Method</label>
+        <select id="fService">
+          <option value="Ocean Freight">🚢 Ocean Freight</option>
+          <option value="Air Freight">✈️ Air Freight</option>
+          <option value="Express Air">🚀 Express Air</option>
+          <option value="Air Cargo">📦 Air Cargo</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Shipping Stage</label><div class="stage-grid" id="stageGrid"></div></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('editModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveCode()">Save Code</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-bg" id="confirmModal">
+  <div class="modal">
+    <div class="confirm-icon" id="confirmIcon">⚠️</div>
+    <div class="confirm-title" id="confirmTitle">Are you sure?</div>
+    <div class="confirm-sub" id="confirmSub"></div>
+    <div class="modal-footer" style="justify-content:center">
+      <button class="btn btn-outline" onclick="closeModal('confirmModal')">Cancel</button>
+      <button class="btn btn-red" id="confirmBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   CONSTANTS & SECRET ADMIN CODE
+   
+   HOW THE ADMIN WORKS:
+   - On the Track page, type the secret code: SWIFTADMIN
+     (instead of a tracking number) and press Track
+   - This shows the admin login overlay
+   - Enter the admin PASSWORD (default: SWIFTADMIN2026)
+   - You are taken to the Admin Panel
+   
+   To change the secret trigger code, edit ADMIN_TRIGGER below.
+   To change the login password, use the Settings tab inside admin.
+══════════════════════════════════════════ */
+const ADMIN_TRIGGER = 'SWIFTADMIN';  // type this in the track box
+const PWD_KEY       = 'ssl_admin_pwd';
+const DATA_KEY      = 'ssl_shipments';
+const CONTACT_KEY   = 'ssl_contact';
+const DEFAULT_PWD   = 'SWIFTADMIN2026';
+
+function getPwd(){ return localStorage.getItem(PWD_KEY) || DEFAULT_PWD; }
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+function navigate(p){
+  // hide admin overlay if going away from admin flow
+  document.getElementById('adminLoginOverlay').classList.remove('on');
+
+  if(p === 'admin'){
+    // Show admin page, hide public header
+    document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active'));
+    document.getElementById('page-admin').classList.add('active');
+    document.getElementById('siteHeader').style.display = 'none';
+    adminInit();
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
+
+  // Show public header for all other pages
+  document.getElementById('siteHeader').style.display = '';
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  const navEl = document.getElementById('nav-'+p);
+  if(navEl) navEl.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+navigate('home');
+
+/* ══════════════════════════════════════════
+   ADMIN LOGIN / LOGOUT
+══════════════════════════════════════════ */
+document.getElementById('lockInput').addEventListener('keydown', e=>{if(e.key==='Enter') tryUnlock();});
+
+function showAdminLogin(){
+  document.getElementById('lockInput').value = '';
+  document.getElementById('lockErr').textContent = '';
+  document.getElementById('adminLoginOverlay').classList.add('on');
+  setTimeout(()=>document.getElementById('lockInput').focus(), 100);
+}
+
+function cancelAdminLogin(){
+  document.getElementById('adminLoginOverlay').classList.remove('on');
+  document.getElementById('trackingInput').value = '';
+}
+
+function tryUnlock(){
+  const val = document.getElementById('lockInput').value;
+  const inp = document.getElementById('lockInput');
+  if(val === getPwd()){
+    document.getElementById('adminLoginOverlay').classList.remove('on');
+    navigate('admin');
+  } else {
+    inp.classList.add('err');
+    document.getElementById('lockErr').textContent = 'Incorrect password. Try again.';
+    setTimeout(()=>inp.classList.remove('err'), 400);
+    inp.value = '';
+  }
+}
+
+function adminLogout(){
+  navigate('home');
+}
+
+/* ══════════════════════════════════════════
+   SHIPMENT DATA
+══════════════════════════════════════════ */
+const STEPS=[
+  {n:"Order Confirmed",           d:"Freight booking confirmed with Swift Ship Logistics. Shipment scheduled for pickup at Jebel Ali Port facility, Dubai."},
+  {n:"Picked Up",                 d:"Cargo collected and sealed at Jebel Ali Port warehouse. Pre-departure inspection completed and passed."},
+  {n:"Customs Clearance — Export",d:"UAE export customs documentation approved and cleared. All HS codes, commercial invoices, and packing lists verified."},
+  {n:"Departed Port of Jebel Ali",d:"Vessel has set sail from Jebel Ali Port. Currently transiting the Red Sea and Suez Canal en route to the Atlantic Ocean."},
+  {n:"In Transit — Atlantic",     d:"Vessel has cleared the Suez Canal and is now crossing the Atlantic Ocean. On schedule for arrival at Port of New York & New Jersey."},
+  {n:"Arrived Port of New York",  d:"Vessel has berthed at Port of New York & New Jersey. Cargo offloaded and moved to the US Customs examination area."},
+  {n:"Out for Delivery",          d:"US Customs cleared. Cargo released and loaded onto a delivery truck for final-mile delivery in New York, NY."},
+  {n:"Delivered",                 d:"Shipment successfully delivered and signed for at the destination address in New York, NY."},
+];
+
+const STAGE_NAMES = [
+  'Order Confirmed','Picked Up','Customs Export','Departed Origin',
+  'In Transit','Arrived NY Port','Out for Delivery','Delivered'
+];
+
+const DEFAULT_SHIPMENTS = {
+  "BX7TQ29NKA":{name:"Electronics Components · 4 pallets",active:0,eta:"Jul 2, 2026"},
+  "KP4MW83ZYE":{name:"Apparel & Textiles · 6 bales",active:0,eta:"Jul 4, 2026"},
+  "YN6RD51HCF":{name:"Industrial Spare Parts · 2 crates",active:0,eta:"Jul 5, 2026"},
+  "GT2JV70XBM":{name:"Medical Equipment · 1 pallet",active:0,eta:"Jul 6, 2026"},
+  "ZA8LE34QPW":{name:"Construction Materials · 10 pallets",active:0,eta:"Jul 8, 2026"},
+  "MH5CX92RVT":{name:"Automotive Parts · 3 crates",active:1,eta:"Jun 28, 2026"},
+  "WQ3NU67FDK":{name:"Retail Goods · 8 boxes",active:1,eta:"Jun 29, 2026"},
+  "RF9PB45SLJ":{name:"Chemical Supplies · 5 drums",active:1,eta:"Jun 30, 2026"},
+  "CV1DT58GXU":{name:"Luxury Furniture · 2 pieces",active:1,eta:"Jul 1, 2026"},
+  "NG0AK16EZB":{name:"Food & Beverage · 12 pallets",active:1,eta:"Jul 2, 2026"},
+  "TR4KD82WPN":{name:"Pharmaceutical Goods · 3 pallets",active:2,eta:"Jun 25, 2026"},
+  "VJ6NE51HGQ":{name:"Machinery Parts · 4 crates",active:2,eta:"Jun 26, 2026"},
+  "LW9AF34XCM":{name:"Consumer Electronics · 6 boxes",active:2,eta:"Jun 27, 2026"},
+  "QB2ST67YRD":{name:"Steel Pipes · 1 FCL container",active:2,eta:"Jun 28, 2026"},
+  "DF5PG90KUZ":{name:"Plastic Raw Materials · 8 pallets",active:2,eta:"Jun 29, 2026"},
+  "HE7MB23FLV":{name:"Commercial Goods · 6 pallets",active:3,eta:"Jun 20, 2026"},
+  "NX1GC78ZTQ":{name:"Sporting Equipment · 5 boxes",active:3,eta:"Jun 21, 2026"},
+  "SW4JH45RAB":{name:"Packaging Materials · 10 pallets",active:3,eta:"Jun 22, 2026"},
+  "OC6KF12VEY":{name:"Frozen Seafood · 3 reefer pallets",active:3,eta:"Jun 23, 2026"},
+  "PM9UL56DGH":{name:"Clothing & Accessories · 7 bales",active:3,eta:"Jun 24, 2026"},
+  "FA3RC29NWX":{name:"Electrical Equipment · 5 pallets",active:4,eta:"Jun 10, 2026"},
+  "IB7YD64KSP":{name:"Glass Products · 2 crates",active:4,eta:"Jun 11, 2026"},
+  "UG2QE87MJT":{name:"Agricultural Products · 9 bags",active:4,eta:"Jun 12, 2026"},
+  "CZ5WF31BHO":{name:"Toys & Games · 4 pallets",active:4,eta:"Jun 13, 2026"},
+  "RK8XA59LCN":{name:"Homeware & Decor · 6 boxes",active:4,eta:"Jun 14, 2026"},
+  "TH1NB74QPE":{name:"Office Furniture · 3 pallets",active:5,eta:"May 28, 2026"},
+  "EV4MC28FZK":{name:"Cosmetics · 5 boxes",active:5,eta:"May 29, 2026"},
+  "JO7GD53RYW":{name:"Industrial Cables · 4 reels",active:5,eta:"May 30, 2026"},
+  "XM2PF91UBL":{name:"Sportswear · 8 bales",active:5,eta:"May 31, 2026"},
+  "AS5KH67VGT":{name:"Ceramic Tiles · 1 FCL container",active:5,eta:"Jun 1, 2026"},
+  "WD3LR58NXQ":{name:"Electronics Accessories · 3 boxes",active:6,eta:"May 25, 2026"},
+  "FQ6TE21MBP":{name:"Jewelry & Accessories · 2 cases",active:6,eta:"May 25, 2026"},
+  "YR9GV44ZHC":{name:"Dry Food Products · 6 pallets",active:6,eta:"May 25, 2026"},
+  "BN4HW89KOA":{name:"Cleaning Supplies · 5 pallets",active:6,eta:"May 25, 2026"},
+  "ZU7CF32SJV":{name:"Medical Supplies · 2 pallets",active:6,eta:"May 25, 2026"},
+  "QP2XM75DKE":{name:"Commercial Goods · 8 pallets",active:7,eta:"Delivered"},
+  "HV5NB38GYT":{name:"Auto Accessories · 4 crates",active:7,eta:"Delivered"},
+  "OL8RA61WFX":{name:"Furniture Components · 3 pallets",active:7,eta:"Delivered"},
+  "IC3SE94UBQ":{name:"Food Ingredients · 7 sacks",active:7,eta:"Delivered"},
+  "GT1JD47LNZ":{name:"Plastic Products · 5 pallets",active:7,eta:"Delivered"},
+};
+
+const DEFAULT_CONTACT = { email:'Swiftshiplog1@gmail.com', phone:'+1 (213) 546-6916', phoneRaw:'12135466916', name:'Swift Ship Logistics' };
+
+let DB = {};
+let CONTACT = {...DEFAULT_CONTACT};
+
+function loadDB(){
+  try { const s=localStorage.getItem(DATA_KEY); DB=s?JSON.parse(s):{...DEFAULT_SHIPMENTS}; } catch(e){ DB={...DEFAULT_SHIPMENTS}; }
+  try { const c=localStorage.getItem(CONTACT_KEY); CONTACT=c?JSON.parse(c):{...DEFAULT_CONTACT}; } catch(e){ CONTACT={...DEFAULT_CONTACT}; }
+}
+function saveDB(){ localStorage.setItem(DATA_KEY, JSON.stringify(DB)); }
+function saveContactDB(){ localStorage.setItem(CONTACT_KEY, JSON.stringify(CONTACT)); }
+
+/* ══════════════════════════════════════════
+   TRACKING (public-facing)
+══════════════════════════════════════════ */
+function trackPackage(){
+  const raw = document.getElementById('trackingInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+
+  // Secret admin trigger
+  if(raw === ADMIN_TRIGGER){
+    showAdminLogin();
+    return;
+  }
+
+  const card = document.getElementById('resultCard');
+  const err  = document.getElementById('errorMsg');
+  card.classList.remove('on');
+  err.classList.remove('on');
+  if(!raw) return;
+
+  loadDB(); // always read latest data
+  const data = DB[raw];
+  if(!data){ err.classList.add('on'); return; }
+
+  const active = data.active;
+  const eta = data.eta || (active===7?'Delivered':'—');
+  const pct  = Math.round((active/(STEPS.length-1))*100);
+
+  document.getElementById('displayCode').textContent = raw;
+  document.getElementById('packageName').textContent = data.name;
+  document.getElementById('metaService').textContent = data.service || 'Ocean Freight';
+  document.getElementById('metaCargo').textContent   = data.name.split('·')[0].trim();
+  document.getElementById('metaEta').textContent     = eta;
+  document.getElementById('progPct').textContent     = pct+'%';
+
+  // Route display
+  document.getElementById('routeOriginCity').textContent = data.originCity || 'Dubai, UAE';
+  document.getElementById('routeOriginSub').textContent  = data.originSub  || 'Jebel Ali Port';
+  document.getElementById('routeDestCity').textContent   = data.destCity   || 'New York, USA';
+  document.getElementById('routeDestSub').textContent    = data.destSub    || 'Port of NY & NJ';
+  const svc = data.service || 'Ocean Freight';
+  document.getElementById('routeIcon').textContent = svc.includes('Air')||svc.includes('Express') ? '✈️' : '🚢';
+
+  const badge = document.getElementById('statusBadge');
+  const status = active===7?'delivered':'in-transit';
+  badge.className = 's-pill '+status;
+  document.getElementById('statusLabel').textContent = active===7?'Delivered':'In Transit';
+
+  const fill = document.getElementById('progFill');
+  fill.style.width = '0%';
+  setTimeout(()=>{ fill.style.width = pct+'%'; }, 80);
+
+  const container = document.getElementById('stepsContainer');
+  container.innerHTML = '';
+  STEPS.forEach((s,i)=>{
+    const isDone=i<active, isActive=i===active;
+    const cls = isDone?'done':isActive?'active':'future';
+    const icon= isDone?'✓':isActive?'●':'';
+    const div = document.createElement('div');
+    div.className = 'tl-step '+cls;
+    div.innerHTML = `<div class="tl-line"></div><div class="tl-node">${icon}</div><div class="tl-body"><div class="tl-name">${s.n}</div><div class="tl-detail">${s.d}</div></div>`;
+    container.appendChild(div);
+    setTimeout(()=>div.classList.add('in'), i*65+60);
+  });
+
+  card.classList.add('on');
+  setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}), 60);
+}
+
+document.getElementById('trackingInput').addEventListener('keydown', e=>{ if(e.key==='Enter') trackPackage(); });
+
+/* ══════════════════════════════════════════
+   UPDATE CONTACT LINKS (called after admin saves contact)
+══════════════════════════════════════════ */
+function refreshContactUI(){
+  loadDB();
+  const email    = CONTACT.email    || 'Swiftshiplog1@gmail.com';
+  const phone    = CONTACT.phone    || '+1 (213) 546-6916';
+  const phoneRaw = CONTACT.phoneRaw || '12135466916';
+  const waHref   = 'https://wa.me/' + phoneRaw;
+  const emHref   = 'mailto:' + email;
+
+  // All email links
+  ['homeEmailVal','trackEmailVal','svcEmailVal','contactEmailVal'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent=email;
+  });
+  ['homeEmailPill','trackEmailPill','svcEmailPill','contactEmailCard'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.href=emHref;
+  });
+  // All WhatsApp links
+  ['homeWaVal','trackWaVal','svcWaVal','contactWaVal'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent=phone;
+  });
+  ['homeWaPill','trackWaPill','svcWaPill','contactWaCard'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.href=waHref;
+  });
+}
+
+/* ══════════════════════════════════════════
+   ADMIN INIT
+══════════════════════════════════════════ */
+let selectedStage = 0;
+let adminReady = false;
+
+function adminInit(){
+  loadDB();
+  if(!adminReady){
+    buildStageGrid();
+    adminReady = true;
+  }
+  renderStats();
+  renderTable();
+  loadContactForm();
+  loadQuickStats();
+  refreshContactUI();
+  // Reset to shipments tab
+  switchAdminTab('shipments');
+}
+
+/* ══════════════════════════════════════════
+   ADMIN TABS
+══════════════════════════════════════════ */
+function switchAdminTab(name){
+  document.querySelectorAll('.adm-tab').forEach((t,i)=>{
+    t.classList.toggle('on', ['shipments','contact','settings'][i]===name);
+  });
+  document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel-'+name).classList.add('on');
+  if(name==='settings') loadQuickStats();
+}
+
+/* ══════════════════════════════════════════
+   STATS
+══════════════════════════════════════════ */
+function renderStats(){
+  const counts = Array(8).fill(0);
+  Object.values(DB).forEach(s=>counts[s.active]++);
+  const total = Object.keys(DB).length;
+  document.getElementById('statsRow').innerHTML=`
+    <div class="stat-box"><div class="stat-box-num">${total}</div><div class="stat-box-lbl">Total Codes</div></div>
+    <div class="stat-box"><div class="stat-box-num">${counts[7]}</div><div class="stat-box-lbl">Delivered</div></div>
+    <div class="stat-box"><div class="stat-box-num">${total-counts[7]-counts[0]}</div><div class="stat-box-lbl">In Transit</div></div>
+    <div class="stat-box"><div class="stat-box-num">${counts[0]}</div><div class="stat-box-lbl">Pending</div></div>
+  `;
+}
+
+function loadQuickStats(){
+  const counts=Array(8).fill(0);
+  Object.values(DB).forEach(s=>counts[s.active]++);
+  document.getElementById('quickStats').innerHTML=STAGE_NAMES.map((n,i)=>
+    `<div style="display:flex;justify-content:space-between;"><span>${n}</span><span style="color:var(--gold2);font-weight:600">${counts[i]}</span></div>`
+  ).join('');
+}
+
+/* ══════════════════════════════════════════
+   TABLE
+══════════════════════════════════════════ */
+function renderTable(){
+  const q  = document.getElementById('searchInput').value.toLowerCase();
+  const fs = document.getElementById('filterStage').value;
+  const rows = Object.entries(DB).filter(([code,d])=>{
+    const matchQ = !q || code.toLowerCase().includes(q) || d.name.toLowerCase().includes(q);
+    const matchS = fs==='' || String(d.active)===fs;
+    return matchQ && matchS;
+  });
+
+  const tbody = document.getElementById('tblBody');
+  if(!rows.length){
+    tbody.innerHTML=`<tr class="empty-row"><td colspan="5">No tracking codes match your filter.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(([code,d])=>`
+    <tr>
+      <td class="code">${code}</td>
+      <td class="cargo" title="${d.name}">${d.name}</td>
+      <td><span class="stage-badge stage-${d.active}">${d.active} — ${STAGE_NAMES[d.active]}</span></td>
+      <td><span style="font-size:12px;color:${d.active===7?'var(--grn)':'var(--tx2)'}">${d.active===7?'✓ Delivered':'In Transit'}</span></td>
+      <td class="actions">
+        <button class="btn btn-outline btn-xs" onclick="openEdit('${code}')">✏️ Edit</button>
+        <button class="btn btn-green btn-xs" onclick="quickStage('${code}',-1)" title="Move back" ${d.active===0?'disabled':''} style="${d.active===0?'opacity:.3;cursor:not-allowed':''}">◀</button>
+        <button class="btn btn-green btn-xs" onclick="quickStage('${code}',1)" title="Move forward" ${d.active===7?'disabled':''} style="${d.active===7?'opacity:.3;cursor:not-allowed':''}">▶</button>
+        <button class="btn btn-red btn-xs" onclick="confirmDelete('${code}')">🗑</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function quickStage(code, dir){
+  const d = DB[code]; if(!d) return;
+  const newStage = Math.max(0, Math.min(7, d.active + dir));
+  if(newStage === d.active) return;
+  DB[code].active = newStage;
+  DB[code].status = newStage===7?'delivered':'in-transit';
+  if(newStage===7) DB[code].eta='Delivered';
+  saveDB();
+  renderTable();
+  renderStats();
+  toast(`${code} moved to Stage ${newStage}: ${STAGE_NAMES[newStage]}`, 'success');
+}
+
+/* ══════════════════════════════════════════
+   CREATE / EDIT MODAL
+══════════════════════════════════════════ */
+function buildStageGrid(){
+  document.getElementById('stageGrid').innerHTML = STAGE_NAMES.map((n,i)=>`
+    <button type="button" class="stage-opt${i===0?' sel':''}" onclick="selectStage(${i})" id="stageOpt${i}">
+      <div class="stage-opt-num">Stage ${i}</div>
+      <div class="stage-opt-name">${n}</div>
+    </button>
+  `).join('');
+}
+
+function selectStage(i){
+  selectedStage = i;
+  document.querySelectorAll('.stage-opt').forEach((el,j)=>el.classList.toggle('sel',j===i));
+}
+
+function openCreate(){
+  document.getElementById('modalTitle').textContent='New Tracking Code';
+  document.getElementById('editingCode').value='';
+  document.getElementById('fCode').value='';
+  document.getElementById('fCode').disabled=false;
+  document.getElementById('fCargo').value='';
+  document.getElementById('fOriginCity').value='';
+  document.getElementById('fOriginSub').value='';
+  document.getElementById('fDestCity').value='';
+  document.getElementById('fDestSub').value='';
+  document.getElementById('fEta').value='';
+  document.getElementById('fService').value='Ocean Freight';
+  selectStage(0);
+  openModal('editModal');
+}
+
+function openEdit(code){
+  const d = DB[code]; if(!d) return;
+  document.getElementById('modalTitle').textContent='Edit Tracking Code';
+  document.getElementById('editingCode').value=code;
+  document.getElementById('fCode').value=code;
+  document.getElementById('fCode').disabled=true;
+  document.getElementById('fCargo').value=d.name;
+  document.getElementById('fOriginCity').value=d.originCity||'';
+  document.getElementById('fOriginSub').value=d.originSub||'';
+  document.getElementById('fDestCity').value=d.destCity||'';
+  document.getElementById('fDestSub').value=d.destSub||'';
+  document.getElementById('fEta').value=d.eta||'';
+  document.getElementById('fService').value=d.service||'Ocean Freight';
+  selectStage(d.active);
+  openModal('editModal');
+}
+
+function saveCode(){
+  const editing    = document.getElementById('editingCode').value;
+  const code       = document.getElementById('fCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  const cargo      = document.getElementById('fCargo').value.trim();
+  const originCity = document.getElementById('fOriginCity').value.trim();
+  const originSub  = document.getElementById('fOriginSub').value.trim();
+  const destCity   = document.getElementById('fDestCity').value.trim();
+  const destSub    = document.getElementById('fDestSub').value.trim();
+  const eta        = document.getElementById('fEta').value.trim();
+  const service    = document.getElementById('fService').value;
+
+  if(!code){ toast('Please enter a tracking code','error'); return; }
+  if(code.length<4){ toast('Code must be at least 4 characters','error'); return; }
+  if(!cargo){ toast('Please enter a cargo description','error'); return; }
+  if(!editing && DB[code]){ toast('That code already exists','error'); return; }
+
+  DB[code] = { name:cargo, active:selectedStage, status:selectedStage===7?'delivered':'in-transit', eta:eta||'', service, originCity, originSub, destCity, destSub };
+  saveDB();
+  closeModal('editModal');
+  renderTable();
+  renderStats();
+  toast(`Code ${code} ${editing?'updated':'created'} — Stage ${selectedStage}: ${STAGE_NAMES[selectedStage]}`, 'success');
+}
+
+/* ══════════════════════════════════════════
+   DELETE
+══════════════════════════════════════════ */
+function confirmDelete(code){
+  document.getElementById('confirmIcon').textContent='🗑️';
+  document.getElementById('confirmTitle').textContent='Delete Tracking Code?';
+  document.getElementById('confirmSub').textContent=`This will permanently remove code "${code}" (${DB[code]?.name}). This cannot be undone.`;
+  document.getElementById('confirmBtn').onclick=()=>{ deleteCode(code); closeModal('confirmModal'); };
+  openModal('confirmModal');
+}
+
+function deleteCode(code){
+  delete DB[code];
+  saveDB();
+  renderTable();
+  renderStats();
+  toast(`Code ${code} deleted`, 'success');
+}
+
+/* ══════════════════════════════════════════
+   CONTACT (admin)
+══════════════════════════════════════════ */
+function loadContactForm(){
+  document.getElementById('ctEmail').value    = CONTACT.email    || '';
+  document.getElementById('ctPhone').value    = CONTACT.phone    || '';
+  document.getElementById('ctName').value     = CONTACT.name     || '';
+  document.getElementById('ctPhoneRaw').value = CONTACT.phoneRaw || '';
+  updateContactPreview();
+}
+
+function updateContactPreview(){
+  document.getElementById('prevEmail').textContent = document.getElementById('ctEmail').value || '—';
+  document.getElementById('prevPhone').textContent = document.getElementById('ctPhone').value || '—';
+}
+
+['ctEmail','ctPhone','ctName','ctPhoneRaw'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', updateContactPreview);
+});
+
+function saveContact(){
+  CONTACT = {
+    email:    document.getElementById('ctEmail').value.trim(),
+    phone:    document.getElementById('ctPhone').value.trim(),
+    name:     document.getElementById('ctName').value.trim(),
+    phoneRaw: document.getElementById('ctPhoneRaw').value.trim(),
+  };
+  saveContactDB();
+  refreshContactUI();
+  toast('Contact info saved — changes are now live on the tracking site', 'success');
+}
+
+/* ══════════════════════════════════════════
+   SETTINGS
+══════════════════════════════════════════ */
+function changePwd(){
+  const cur = document.getElementById('curPwd').value;
+  const nw  = document.getElementById('newPwd').value;
+  const cf  = document.getElementById('cfmPwd').value;
+  if(cur !== getPwd()){ toast('Current password is incorrect','error'); return; }
+  if(nw.length < 6){ toast('New password must be at least 6 characters','error'); return; }
+  if(nw !== cf){ toast('New passwords do not match','error'); return; }
+  localStorage.setItem(PWD_KEY, nw);
+  document.getElementById('curPwd').value='';
+  document.getElementById('newPwd').value='';
+  document.getElementById('cfmPwd').value='';
+  toast('Password updated successfully', 'success');
+}
+
+function exportData(){
+  const blob = new Blob([JSON.stringify(DB, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'swiftship-codes-'+Date.now()+'.json';
+  a.click();
+  toast('Export downloaded', 'success');
+}
+
+function importClick(){ document.getElementById('importFile').click(); }
+
+function importData(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if(typeof data !== 'object'){ throw new Error(); }
+      DB = data;
+      saveDB();
+      renderTable();
+      renderStats();
+      loadQuickStats();
+      toast(`Imported ${Object.keys(data).length} codes`, 'success');
+    } catch { toast('Invalid JSON file','error'); }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+
+function confirmReset(){
+  document.getElementById('confirmIcon').textContent='⚠️';
+  document.getElementById('confirmTitle').textContent='Reset to Defaults?';
+  document.getElementById('confirmSub').textContent='This will overwrite all current tracking codes with the original 40 default codes. Your changes will be lost.';
+  document.getElementById('confirmBtn').onclick=()=>{
+    DB={...DEFAULT_SHIPMENTS};
+    saveDB();
+    renderTable();
+    renderStats();
+    loadQuickStats();
+    closeModal('confirmModal');
+    toast('Reset to default data','success');
+  };
+  openModal('confirmModal');
+}
+
+function bulkMove(){
+  const from = parseInt(document.getElementById('bulkFrom').value);
+  const to   = parseInt(document.getElementById('bulkTo').value);
+  if(from===to){ toast('From and To stages are the same','error'); return; }
+  let count=0;
+  Object.keys(DB).forEach(code=>{
+    if(DB[code].active===from){
+      DB[code].active=to;
+      DB[code].status=to===7?'delivered':'in-transit';
+      if(to===7) DB[code].eta='Delivered';
+      count++;
+    }
+  });
+  saveDB();
+  renderTable();
+  renderStats();
+  loadQuickStats();
+  toast(`Moved ${count} code${count!==1?'s':''} from Stage ${from} to Stage ${to}`, 'success');
+}
+
+/* ══════════════════════════════════════════
+   MODAL HELPERS
+══════════════════════════════════════════ */
+function openModal(id){ document.getElementById(id).classList.add('on'); }
+function closeModal(id){ document.getElementById(id).classList.remove('on'); }
+document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)bg.classList.remove('on');}));
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+function toast(msg, type='success'){
+  const el = document.createElement('div');
+  el.className = `toast-item ${type}`;
+  el.innerHTML = `<span>${type==='success'?'✓':'✕'}</span>${msg}`;
+  document.getElementById('toast').appendChild(el);
+  setTimeout(()=>el.remove(), 3500);
+}
+
+// Load contact info on startup so links are up to date
+loadDB();
+refreshContactUI();
+</script>
+</body>
+</html>
